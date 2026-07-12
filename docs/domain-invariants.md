@@ -42,6 +42,9 @@ Labels mean:
 - **Accepted:** A normal repository miss is distinct from a storage failure.
 - **Accepted:** Repository implementations do not expose mutable internal references.
 - **Accepted:** Domain contracts and behavior remain independent from persistence implementations.
+- **Accepted:** Application services call domain behavior for lifecycle and progress decisions rather than reproducing those rules.
+- **Accepted:** Routes and UI adapters do not coordinate repositories directly.
+- **Accepted:** Implemented application commands perform at most one repository write unless future transaction semantics are explicitly introduced.
 - **Proposed:** Completion records should retain a link to the originating source when one exists, even if the source is later archived.
 - **Proposed:** Season Review becomes the authoritative user-authored closing interpretation while remaining editable only under an explicit future policy.
 

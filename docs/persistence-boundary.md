@@ -20,7 +20,7 @@ Persistence may import domain contracts because repositories return domain objec
 
 The domain owns lifecycle meaning, activation, progress, summaries, and historical rules. Persistence owns serialization, storage/retrieval boundaries, normal not-found behavior, record reconstruction safety, deterministic query ordering, and storage failures. Repositories never transition statuses, calculate progress, infer completion, or authorize users.
 
-Future application services will coordinate domain transitions and repository saves. Identity and authorization will be applied above or around this boundary rather than embedded in records or repositories.
+Application services coordinate domain transitions and repository saves. Identity and authorization will be applied above or around this boundary later rather than embedded in records or repositories. Routes and UI must not call repositories directly.
 
 ## Repository contracts
 
@@ -80,7 +80,7 @@ Delete operations are omitted. Physical deletion may eventually be useful for dr
 
 ## Aggregate-loading decision
 
-Season aggregate loading is postponed. The static application is not connected, and no application service currently needs a single aggregate query. Adding it now would risk designing a read API around placeholder screens. A future application use case can introduce a focused query that composes these repositories without making the aggregate a domain entity.
+Repository-level season aggregate loading remains postponed. The application layer now assembles a `SeasonOverview` read model through existing repository contracts because that use case is immediately useful; it does not persist the overview or introduce a broad persistence query. A future production implementation may optimize the reads behind compatible contracts after real performance evidence.
 
 ## Testing strategy
 

@@ -122,3 +122,7 @@ Pure behavior is compiled with a focused `tsconfig.test.json` and tested with No
 - Historical versioning and audit records
 - Deletion/retention policies beyond lifecycle preservation
 - Automatic inference of any lifecycle state
+
+## Application policy note
+
+The application-service layer currently freezes all child mutations after a season is completed or archived and permits outcome/milestone progress only for active goals in active seasons. Draft and active seasons may accept draft goals and valid goal lifecycle transitions. These are orchestration policies around the domain lifecycle, not additional domain statuses or automatic transitions.

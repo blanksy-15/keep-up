@@ -83,3 +83,7 @@ Daily check-ins are created through the Execution experience because they are pa
 ## Persistence infrastructure boundary
 
 Persistence is infrastructure, not a user-facing product domain. It stores and reconstructs domain state through explicit repository interfaces and must not define lifecycle rules, calculate progress, or silently change user-owned records. Future application services will coordinate domain behavior with repository operations; future identity and authorization checks will sit above or around persistence. Vendor-specific database code, migrations, and error translation must remain behind repository implementations. See [Initial Persistence Boundary](./persistence-boundary.md).
+
+## Application-service boundary
+
+Application services coordinate product use cases across domain behavior and repository contracts. They own orchestration, parent-state application policy, application error translation, and read-model assembly, but not lifecycle/progress rules or record serialization. Routes and UI adapters must not coordinate repositories directly. Completed/archived-season child freezes and active-only progress updates are currently application policies rather than changes to domain lifecycle invariants. See [Application Service Layer](./application-services.md).

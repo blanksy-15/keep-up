@@ -51,6 +51,10 @@ keep-up/
 ├── docs/               # Product vocabulary, boundaries, workflows, scope, and principles
 ├── src/
 │   ├── app/            # App Router routes, layouts, static product pages, and global styles
+│   ├── application/
+│   │   ├── contracts/  # Clock and identifier-generation boundaries
+│   │   ├── planning/   # Focused planning use cases and parent-state policies
+│   │   └── errors.ts   # Stable adapter-facing application results and error mapping
 │   ├── components/
 │   │   ├── app-shell/  # Responsive shell, navigation, and page headers
 │   │   └── ui/         # Small reusable presentation primitives
@@ -62,7 +66,7 @@ keep-up/
 │       ├── mapping/    # Pure domain/record conversion and reconstruction validation
 │       ├── memory/     # Isolated deterministic in-memory implementations
 │       └── records/    # Serializable storage-oriented records
-├── tests/              # Domain behavior and persistence contract tests using Node's test runner
+├── tests/              # Domain, persistence, and application-service tests using Node's runner
 ├── PROJECT_PLAN.md     # Living architecture and roadmap
 └── configuration files
 ```
@@ -70,6 +74,7 @@ keep-up/
 The initial structure deliberately retains only directories with immediate value. As product requirements emerge, use these conventions:
 
 - `src/app`: routing and route composition; route files should remain thin.
+- `src/application`: focused dependency-injected use cases coordinating domain behavior and persistence contracts; no framework or concrete-storage imports.
 - `docs`: product and domain definitions that govern later implementation decisions.
 - `src/domain`: framework-independent types for stable core concepts; no UI or persistence concerns.
 - `src/domain/behavior`: pure immutable lifecycle, validation, progress, and summary behavior with structured results.
@@ -121,16 +126,17 @@ The future Today View, or equivalent daily execution surface, is a primary appli
 2. **Product and domain definition** — completed; clarified vocabulary, user needs, boundaries, and initial workflows.
 3. **Application shell and design foundation** — completed; established navigation, layout, accessibility, and visual conventions.
 4. **Core season and goal domain modeling** — completed; defined behavior and rules independently of persistence and presentation.
-5. **Initial persistence layer** — current; introduce vendor-neutral storage boundaries and validate them in memory without selecting production storage.
-6. **Personal dashboard** — compose the primary user's essential views and actions.
-7. **Weekly scorecards and reflection** — support review, learning, and planning cycles.
-8. **Habit and health tracking** — add focused tracking capabilities based on validated needs.
-9. **Analytics and historical insights** — surface useful patterns without encouraging noisy metrics.
-10. **Authentication and account ownership** — establish identity, authorization, and ownership boundaries.
-11. **AI coaching boundaries and initial integration** — define safe, useful coaching behavior behind a provider boundary.
-12. **Notifications** — introduce intentional reminders through selected channels.
-13. **Trusted user expansion** — support separate friend and family accounts, privacy, and optional sharing.
-14. **Production hardening** — strengthen security, observability, performance, reliability, and operations.
+5. **Initial persistence layer** — completed; introduced vendor-neutral storage boundaries and validated them in memory without selecting production storage.
+6. **Application service layer** — current; coordinate planning use cases across domain behavior and persistence contracts.
+7. **Personal dashboard** — compose the primary user's essential views and actions.
+8. **Weekly scorecards and reflection** — support review, learning, and planning cycles.
+9. **Habit and health tracking** — add focused tracking capabilities based on validated needs.
+10. **Analytics and historical insights** — surface useful patterns without encouraging noisy metrics.
+11. **Authentication and account ownership** — establish identity, authorization, and ownership boundaries.
+12. **AI coaching boundaries and initial integration** — define safe, useful coaching behavior behind a provider boundary.
+13. **Notifications** — introduce intentional reminders through selected channels.
+14. **Trusted user expansion** — support separate friend and family accounts, privacy, and optional sharing.
+15. **Production hardening** — strengthen security, observability, performance, reliability, and operations.
 
 Milestone ordering may change as requirements become clearer. Detailed implementation tickets for later milestones should wait until their requirements and dependencies are understood.
 
@@ -386,6 +392,66 @@ Milestone ordering may change as requirements become clearer. Detailed implement
 
 **Consequences:** Future application orchestration will define focused aggregate queries and parent checks; later database constraints will enforce storage integrity.
 
+## 2026-07-11 — Introduce focused framework-independent application services
+
+**Status:** Accepted
+
+**Context:** Routes and UI should not reproduce use-case coordination or call repositories directly.
+
+**Decision:** Implement focused dependency-injected async functions for planning creation, lifecycle, progress, milestones, and overview assembly. Services depend on domain behavior and persistence interfaces only.
+
+**Consequences:** Future adapters receive one use-case boundary; no command bus, service superclass, framework dependency, or concrete repository dependency is introduced.
+
+## 2026-07-11 — Separate application errors from lower layers
+
+**Status:** Accepted
+
+**Context:** Adapters need stable failures without exposing storage details or losing domain validation context.
+
+**Decision:** Translate domain and persistence results into structured application errors, preserving domain fields while hiding persistence implementation messages. Missing targets and broken parent references remain distinct.
+
+**Consequences:** Expected failures do not throw, `not_found` differs from `integrity_failure`, and vendor errors do not cross the application boundary.
+
+## 2026-07-11 — Inject clock and identifier generation
+
+**Status:** Accepted
+
+**Context:** Creation and lifecycle operations require deterministic timestamps and IDs without coupling use cases to platform randomness or time.
+
+**Decision:** Define `Clock` and `IdGenerator` contracts and require them through planning dependencies.
+
+**Consequences:** Tests use fixed time and deterministic IDs; no UUID dependency or production implementation is required yet.
+
+## 2026-07-11 — Freeze historical parents and active-only progress
+
+**Status:** Accepted
+
+**Context:** Child changes after season completion would undermine historical snapshots, and progress on inactive goals is ambiguous.
+
+**Decision:** Allow goal creation/lifecycle within draft or active seasons, freeze children of completed/archived seasons, and allow outcome/milestone progress only for active goals in active seasons.
+
+**Consequences:** These remain explicit application policies around domain rules and may evolve only through a documented product decision.
+
+## 2026-07-11 — Assemble season overview in the application layer
+
+**Status:** Accepted
+
+**Context:** Future adapters need one planning read model without turning placeholder UI or repository aggregates into domain concepts.
+
+**Decision:** Compose season, ordered children, and existing domain summaries into a non-persisted `SeasonOverview`; fail explicitly on inconsistent relationships.
+
+**Consequences:** Repository aggregate queries remain postponed and may later optimize this use case behind compatible boundaries.
+
+## 2026-07-11 — Limit commands to one write without transaction claims
+
+**Status:** Accepted
+
+**Context:** The current unit of work has no transaction semantics.
+
+**Decision:** Permit multi-repository reads followed by at most one write per implemented command. Do not claim commit, rollback, or atomic multi-record behavior.
+
+**Consequences:** No partial multi-write operations exist; future production persistence must supply transactions and uniqueness constraints where required.
+
 # Product and Domain Documents
 
 - [Domain glossary](./docs/domain-glossary.md)
@@ -397,6 +463,7 @@ Milestone ordering may change as requirements become clearer. Detailed implement
 - [Application shell and design foundation](./docs/application-shell.md)
 - [Season and goal domain behavior](./docs/season-goal-behavior.md)
 - [Initial persistence boundary](./docs/persistence-boundary.md)
+- [Application service layer](./docs/application-services.md)
 
 # Unresolved Product Questions
 
@@ -404,14 +471,14 @@ Important open questions are maintained in [Initial Product Scope](./docs/initia
 
 # Current Milestone
 
-## Initial Persistence Boundary
+## Application Service Layer
 
-**Current objective:** Establish vendor-neutral repositories, serializable records, validating mappers, deterministic in-memory implementations, and tested persistence semantics without choosing production storage.
+**Current objective:** Establish framework-independent planning use cases that coordinate domain behavior and persistence contracts through deterministic dependencies and stable application results.
 
-**Included work:** Explicit season, goal, outcome, and milestone repositories; primitive records; pure round-trip mappers; structured persistence errors; create-or-replace in-memory storage; deterministic listing; reference isolation; repository grouping; documentation; and contract tests.
+**Included work:** Season/goal creation and lifecycle orchestration; outcome and milestone updates; centralized parent-state policies; application error translation; clock/ID contracts; season overview assembly; deterministic integration tests; and documented atomicity limits.
 
-**Explicitly excluded work:** Production database/ORM selection, migrations, environment variables, transactions, aggregate loading, delete policy, UI wiring, application services, authentication, APIs, server actions, daily-task/reflection persistence, caching, and production/custom domain configuration.
+**Explicitly excluded work:** Route/UI/server-action/API wiring, authentication/ownership, production database/ORM, transaction APIs, multi-record writes, general editing, outcome/milestone creation, daily execution, reflections, AI, notifications, analytics, caching, and deployment configuration.
 
-**Completion criteria:** Repository and mapping contracts preserve all supported fields; malformed records fail explicitly; in-memory implementations are deterministic and reference-isolated; existing and persistence tests pass; dependency direction is audited; lint/typecheck/build pass; and no vendor or UI integration is introduced.
+**Completion criteria:** Services reuse domain behavior, depend on repository interfaces, translate failures, enforce documented parent policies, perform at most one write, assemble deterministic overviews, pass all suites and dependency audits, and leave routes/static UI unchanged.
 
-**Next decision point:** Define the application-service boundary that coordinates domain behavior and repositories without coupling routes directly to persistence.
+**Next decision point:** Connect one read-only product surface to the application layer through a thin framework adapter without introducing mutation or production storage.

@@ -4,7 +4,7 @@ Keep-up is a long-term personal operating system for goals, habits, health, proj
 
 ## Status
 
-The project is in **Initial Persistence Boundary**. It contains a responsive static shell, framework-independent domain behavior, and tested vendor-neutral repository contracts with an in-memory implementation. No production database exists and the UI is not connected to persistence.
+The project is in **Application Service Layer**. It contains a responsive static shell, framework-independent domain behavior, vendor-neutral persistence, and tested planning use cases. No production database or authentication exists, and the UI remains disconnected.
 
 Keep-up is intended to be mobile-first. A fast daily execution experience for priorities, due work, completion, and lightweight check-ins is a central product capability alongside deeper planning and reflection. The final production URL and custom domain have not been selected.
 
@@ -64,6 +64,10 @@ Pure season, goal, milestone, outcome-progress, activation, and summary behavior
 
 Repository contracts, serializable records, pure mappers, and isolated in-memory repositories live in [`src/persistence`](./src/persistence). The in-memory implementation exists to validate the boundary and is not production storage. Domain behavior does not import persistence, and no database or ORM has been selected.
 
+## Application services
+
+Focused planning use cases live in [`src/application`](./src/application). They coordinate domain behavior and repository interfaces for season/goal creation and lifecycle, outcome progress, milestone status, and season overviews. Services use injected clock and ID boundaries and return structured application results. Routes and the static UI do not call these services yet.
+
 ## Production build
 
 ```bash
@@ -89,5 +93,6 @@ Documentation is part of the implementation. Update relevant documentation along
 - [Application shell](./docs/application-shell.md) — routes, responsive navigation, design tokens, accessibility, and placeholder policy
 - [Season and goal behavior](./docs/season-goal-behavior.md) — lifecycle, activation, progress, summary, and preservation rules
 - [Persistence boundary](./docs/persistence-boundary.md) — repositories, records, mapping, in-memory semantics, and postponed storage choices
+- [Application services](./docs/application-services.md) — use-case orchestration, parent policies, errors, read models, and atomicity limits
 
 Any future change to architecture, scope, roadmap, conventions, or a major decision must update the relevant documentation and `PROJECT_PLAN.md` in the same change.
