@@ -18,6 +18,8 @@ export type WeeklyScorecardId = string;
 export type WeeklyReflectionId = string;
 export type SeasonReviewId = string;
 export type CarryForwardInsightId = string;
+export type SeasonSetupDraftId = string;
+export type WorkflowItemId = string;
 
 export interface DateRange {
   startDate: CalendarDate;

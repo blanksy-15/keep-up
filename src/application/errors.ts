@@ -8,7 +8,9 @@ export type ApplicationErrorCode =
   | "conflict"
   | "persistence_failure"
   | "integrity_failure"
-  | "atomicity_failure";
+  | "atomicity_failure"
+  | "assistant_unavailable"
+  | "assistant_failure";
 
 export interface ApplicationError {
   code: ApplicationErrorCode;

@@ -1,5 +1,23 @@
 # Vision
 
+## Current milestone (2026-07-11)
+
+**Season Setup and Review Workflows** — framework-independent workflow contracts, application services, in-memory persistence, provider-neutral assistant boundaries, and tests. The Application Service Layer milestone is complete.
+
+New organization includes `src/application/season-workflow`, `src/application/assistant`, `docs/season-workflow.md`, `docs/assistant-boundaries.md`, and `docs/season-summary-standard.md`.
+
+### Decisions
+
+- Goals remain unrestricted, open-ended, user-authored, and never require categories or templates.
+- Guided setup drafts stay separate from authoritative planning records.
+- Confirmation is explicit and does not activate a season.
+- Replaceable assistant providers return proposals requiring selective user application.
+- Summaries are pragmatic, grounded, uncertainty-aware, and constructively future-positive.
+- Carry-forward insights require explicit approval and are embedded in finalized reviews.
+- Conversion produces a deterministic plan because transactional persistence is unavailable.
+- Finalized reviews are immutable initially.
+- Provider integration, chatbot/API transport, production persistence, authentication, and workflow UI remain postponed.
+
 Keep-up is a personal operating system for intentional growth, execution, reflection, and long-term progress. It will bring goals, habits, health, projects, and personal growth into one coherent system that helps a person decide what matters, act consistently, learn from outcomes, and carry useful context forward.
 
 # Core Philosophy

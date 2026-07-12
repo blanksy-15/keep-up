@@ -1,5 +1,7 @@
 # Initial Persistence Boundary
 
+Setup drafts and reviews have dedicated repository contracts and in-memory adapters. Nested values contain serializable domain primitives. In-memory adapters deep-clone reads and writes and sort lists deterministically.
+
 This boundary stores and reconstructs planning-domain state without choosing a database, ORM, hosting provider, transport, or deployment model. The in-memory implementation validates the contracts and is not production persistence.
 
 ## Dependency direction

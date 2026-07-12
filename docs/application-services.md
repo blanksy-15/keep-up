@@ -1,5 +1,7 @@
 # Application Service Layer
 
+Season workflow services edit setup drafts, evaluate readiness, require confirmation, generate conversion plans, capture reviews, apply explicitly accepted proposals, approve selected insights, and finalize reviews. Dependencies are injected and workflow persistence remains separate from authoritative planning writes.
+
 The application layer represents planning use cases by coordinating domain behavior with persistence contracts. It is framework-independent and is not connected to routes, server actions, APIs, or the static UI.
 
 ## Dependency direction

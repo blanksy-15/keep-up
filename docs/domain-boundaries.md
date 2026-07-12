@@ -1,5 +1,7 @@
 # Domain Boundaries
 
+Guided setup and review form a workflow boundary beside authoritative planning. Services may read planning state, but setup conversion produces a plan only and reviews do not write seasons. Provider-neutral assistant ports sit outside persistence and domain behavior.
+
 These boundaries divide responsibility and vocabulary, not necessarily code packages or services. The initial implementation may remain simple while preserving these seams.
 
 ## Planning

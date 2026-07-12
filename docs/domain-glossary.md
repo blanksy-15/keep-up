@@ -1,5 +1,12 @@
 # Domain Glossary
 
+- **Season setup draft:** open-ended preparation that is not yet a season.
+- **Setup readiness:** explicit blockers and non-blocking warnings.
+- **Conversion plan:** deterministic description of records that could be created; it performs no writes.
+- **Season review:** completed-season reflection with user content separate from assistant proposals.
+- **Carry-forward insight:** explicitly approved learning traced to its source.
+- **Assistant proposal:** non-authoritative suggestion requiring selection or approval.
+
 This glossary establishes shared product language without deciding storage, UI, or implementation details. Statuses are **Initial**, **Later**, or **Undecided**.
 
 ## Planning and execution

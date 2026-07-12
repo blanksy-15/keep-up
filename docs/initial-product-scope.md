@@ -1,5 +1,7 @@
 # Initial Product Scope
 
+The framework-independent core includes guided setup, completed-season review, carry-forward context, readiness evaluation, and provider-neutral assistant ports. It excludes provider SDKs, model configuration, API routes, workflow UI, authentication, database adapters, automatic conversion, activation, and automatic next-season creation.
+
 ## Initial Product
 
 The first coherent release supports one person through one complete season lifecycle and regular daily use. It does not require every included concept to be equally sophisticated.

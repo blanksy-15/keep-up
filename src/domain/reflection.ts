@@ -30,9 +30,25 @@ export interface WeeklyReflection {
 export interface SeasonReview {
   id: SeasonReviewId;
   seasonId: SeasonId;
-  summary: string;
+  status: "draft" | "ready_for_summary" | "summary_proposed" | "finalized";
+  userContent: {
+    highlights: string;
+    challenges: string;
+    lessons: string;
+    nextSeasonConsiderations: string;
+  };
+  assistantProposal?: SeasonReviewSummaryProposal;
+  approvedSummary?: string;
+  approvedCarryForwardInsights: CarryForwardInsight[];
   createdAt: Timestamp;
   updatedAt: Timestamp;
+  finalizedAt?: Timestamp;
+}
+
+export interface SeasonReviewSummaryProposal {
+  executiveSummary: string;
+  observations: string[];
+  carryForwardCandidates: { id: string; insight: string }[];
 }
 
 export interface CarryForwardInsight {
@@ -41,4 +57,5 @@ export interface CarryForwardInsight {
   insight: string;
   sourceType: "weekly-reflection" | "season-review";
   sourceId: WeeklyReflectionId | SeasonReviewId;
+  approvedAt?: Timestamp;
 }

@@ -1,5 +1,9 @@
 # keep-up
 
+The current milestone is **Season Setup and Review Workflows**. Framework-independent orchestration lives in `src/application/season-workflow`, workflow contracts in `src/domain`, and replaceable assistant ports in `src/application/assistant`. Goals remain unrestricted and user-owned; categories, templates, and assistant suggestions cannot determine validity.
+
+Run `npm.cmd test` for the full suite. There is no real assistant provider, chatbot/API integration, interactive workflow UI, authentication, or production persistence yet.
+
 Keep-up is a long-term personal operating system for goals, habits, health, projects, and personal growth. It is intended to support intentional growth, consistent execution, reflection, and durable progress without becoming burdensome.
 
 ## Status

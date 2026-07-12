@@ -1,5 +1,15 @@
 # Domain Invariants
 
+## Guided season workflows
+
+- Setup drafts are separate from authoritative seasons and never activate planning records.
+- Confirmed setup drafts and finalized reviews are immutable.
+- Readiness warnings do not block confirmation; structural blockers do.
+- Goals are user-owned, open-ended statements without required categorization.
+- Assistant proposals require explicit user selection or approval.
+- Reviews exist only for completed seasons and never mutate their source season.
+- Carry-forward insights retain traceability and never create commitments automatically.
+
 Labels mean:
 
 - **Accepted:** established for this product direction and suitable to guide later implementation.
