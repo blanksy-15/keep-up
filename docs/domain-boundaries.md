@@ -2,6 +2,8 @@
 
 Guided setup and review form a workflow boundary beside authoritative planning. Services may read planning state, but setup conversion produces a plan only and reviews do not write seasons. Provider-neutral assistant ports sit outside persistence and domain behavior.
 
+Durable conversion is application orchestration over a transaction-runner contract. PostgreSQL and Drizzle remain infrastructure details: application services do not import them, and database constraints do not replace Planning or Reflection lifecycle rules.
+
 These boundaries divide responsibility and vocabulary, not necessarily code packages or services. The initial implementation may remain simple while preserving these seams.
 
 ## Planning

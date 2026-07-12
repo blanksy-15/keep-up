@@ -9,6 +9,11 @@
 - Assistant proposals require explicit user selection or approval.
 - Reviews exist only for completed seasons and never mutate their source season.
 - Carry-forward insights retain traceability and never create commitments automatically.
+- Confirmed setup conversion is atomic and creates one authoritative draft season graph.
+- Successfully converted drafts retain exactly one target season and cannot convert again.
+- Proposal IDs never become authoritative planning IDs.
+- Rollback preserves the pre-conversion workflow and planning state.
+- Database constraints protect structural relationships; domain and application behavior retain lifecycle authority.
 
 Labels mean:
 

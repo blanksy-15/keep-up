@@ -2,9 +2,11 @@
 
 ## Current milestone (2026-07-11)
 
-**Season Setup and Review Workflows** — framework-independent workflow contracts, application services, in-memory persistence, provider-neutral assistant boundaries, and tests. The Application Service Layer milestone is complete.
+**PostgreSQL Persistence and Transactional Setup Conversion** — durable schema, migration, repositories, transaction boundary, authoritative ID allocation, and atomic confirmed-setup conversion. Season Setup and Review Workflows is complete.
 
 New organization includes `src/application/season-workflow`, `src/application/assistant`, `docs/season-workflow.md`, `docs/assistant-boundaries.md`, and `docs/season-summary-standard.md`.
+
+Database organization includes `src/config`, `src/database/schema`, `src/persistence/postgres`, `drizzle`, and `docs/postgresql-persistence.md`.
 
 ### Decisions
 
@@ -17,6 +19,14 @@ New organization includes `src/application/season-workflow`, `src/application/as
 - Conversion produces a deterministic plan because transactional persistence is unavailable.
 - Finalized reviews are immutable initially.
 - Provider integration, chatbot/API transport, production persistence, authentication, and workflow UI remain postponed.
+- PostgreSQL is the durable database model; Drizzle and migration-first schema management are provider-neutral implementation choices.
+- `DATABASE_URL` is validated only at explicit composition; no hosted provider is selected.
+- A transaction-runner contract hides real PostgreSQL transactions from application services.
+- Conversion allocates authoritative IDs, returns proposal mappings, creates draft records only, and rejects repeated conversion.
+- `SELECT ... FOR UPDATE` protects conversion status rechecks; database uniqueness provides final enforcement.
+- Evolving workflow bodies use validated JSONB while stable planning relationships remain relational.
+- In-memory repositories remain; PGlite provides isolated PostgreSQL-compatible migration/transaction tests.
+- UI integration, authentication/ownership, AI providers, chatbot transport, hosted provisioning, and daily execution remain postponed.
 
 Keep-up is a personal operating system for intentional growth, execution, reflection, and long-term progress. It will bring goals, habits, health, projects, and personal growth into one coherent system that helps a person decide what matters, act consistently, learn from outcomes, and carry useful context forward.
 

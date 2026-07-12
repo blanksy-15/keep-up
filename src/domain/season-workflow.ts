@@ -1,4 +1,4 @@
-import type { CalendarDate, CarryForwardInsightId, SeasonSetupDraftId, Timestamp, WorkflowItemId } from "./shared";
+import type { CalendarDate, CarryForwardInsightId, SeasonId, SeasonSetupDraftId, Timestamp, WorkflowItemId } from "./shared";
 
 export type WorkflowContentSource = "user" | "assistant";
 export type SeasonSetupStatus = "draft" | "ready_for_review" | "confirmed" | "converted" | "abandoned";
@@ -30,6 +30,8 @@ export interface SeasonSetupDraft {
   createdAt: Timestamp;
   updatedAt: Timestamp;
   confirmedAt?: Timestamp;
+  convertedAt?: Timestamp;
+  targetSeasonId?: SeasonId;
 }
 
 export interface SetupReadinessIssue { code: string; message: string; field?: string; }

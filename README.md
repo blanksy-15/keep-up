@@ -1,8 +1,12 @@
 # keep-up
 
-The current milestone is **Season Setup and Review Workflows**. Framework-independent orchestration lives in `src/application/season-workflow`, workflow contracts in `src/domain`, and replaceable assistant ports in `src/application/assistant`. Goals remain unrestricted and user-owned; categories, templates, and assistant suggestions cannot determine validity.
+The current milestone is **PostgreSQL Persistence and Transactional Setup Conversion**. Framework-independent orchestration lives in `src/application/season-workflow`, workflow contracts in `src/domain`, and replaceable assistant ports in `src/application/assistant`. Goals remain unrestricted and user-owned; categories, templates, and assistant suggestions cannot determine validity.
 
-Run `npm.cmd test` for the full suite. There is no real assistant provider, chatbot/API integration, interactive workflow UI, authentication, or production persistence yet.
+Run `npm.cmd test` for the full suite. There is no real assistant provider, chatbot/API integration, interactive workflow UI, authentication, hosted database, or production credential configuration yet.
+
+## Database
+
+The durable adapter uses PostgreSQL, Drizzle, and the standard `pg` driver. Copy the placeholder shape from `.env.example` and provide `DATABASE_URL` only when explicitly composing database infrastructure. Use `npm.cmd run db:generate`, `npm.cmd run db:check`, and `npm.cmd run db:migrate`; `npm.cmd run test:db` uses an isolated PGlite engine. Confirmed setup conversion atomically creates draft planning records without activation. No hosted provider, credentials, UI connection, authentication, or multi-user ownership is included.
 
 Keep-up is a long-term personal operating system for goals, habits, health, projects, and personal growth. It is intended to support intentional growth, consistent execution, reflection, and durable progress without becoming burdensome.
 

@@ -1,0 +1,3 @@
+import { persistenceFailure, type PersistenceResult } from "../errors";
+export function databaseFailure<T=never>(message:string,cause:unknown):PersistenceResult<T>{const code=typeof cause==="object"&&cause!==null&&"code" in cause?String(cause.code):"";return persistenceFailure({code:code==="23505"?"conflict":code.startsWith("23")?"invalid_record":"storage_failure",message,cause});}
+export function normalizeTimestamps<T extends Record<string,unknown>>(row:T):T {const copy={...row};for(const [key,value] of Object.entries(copy)){if(key.endsWith("At")&&typeof value==="string")Object.assign(copy,{[key]:new Date(value).toISOString()});}return copy;}
