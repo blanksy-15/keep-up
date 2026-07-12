@@ -1,5 +1,7 @@
 # Initial Persistence Boundary
 
+Product repository contracts are owner-scoped. PostgreSQL filters reads by owner, rejects cross-owner replacement and parent linkage, and stores non-null owner foreign keys on all authoritative tables. Better Auth tables remain authentication infrastructure and never leak credentials into product repositories.
+
 PostgreSQL with Drizzle is the first durable adapter; in-memory repositories remain supported. Migration files own schema change. Application services see repository and transaction-runner contracts, never Drizzle. Database constraints protect structural relationships while domain behavior owns lifecycle rules. PostgreSQL errors map to stable persistence errors, routes do not access the database, and deletion remains omitted.
 
 Real PostgreSQL CI is required for locking claims. PGlite remains the fast compatibility layer, while PostgreSQL 16 tests migration behavior, driver translation, transaction rollback, and separate-connection contention.

@@ -7,6 +7,7 @@ const statuses: readonly SeasonStatus[] = ["draft", "active", "completed", "arch
 
 export function toSeasonRecord(season: Season): SeasonRecord {
   return {
+    ownerId:season.ownerId,
     id: season.id,
     name: season.name,
     startDate: season.dates.startDate,
@@ -24,6 +25,7 @@ export function toSeasonRecord(season: Season): SeasonRecord {
 export function toSeasonDomain(record: SeasonRecord): PersistenceResult<Season> {
   const errors = [];
   if (!isNonEmptyString(record.id)) errors.push(recordError("id", "Season ID must be a non-empty string."));
+  if (!isNonEmptyString(record.ownerId)) errors.push(recordError("ownerId", "Season owner ID must be a non-empty string."));
   if (!isString(record.name)) errors.push(recordError("name", "Season name must be a string."));
   if (!isCalendarDate(record.startDate)) errors.push(recordError("startDate", "Season start date must be a valid calendar date."));
   if (!isCalendarDate(record.endDate)) errors.push(recordError("endDate", "Season end date must be a valid calendar date."));
@@ -37,6 +39,7 @@ export function toSeasonDomain(record: SeasonRecord): PersistenceResult<Season> 
   if (errors.length > 0) return { ok: false, errors };
 
   return persistenceSuccess({
+    ownerId:record.ownerId,
     id: record.id,
     name: record.name,
     dates: { startDate: record.startDate, endDate: record.endDate },

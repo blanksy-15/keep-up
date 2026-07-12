@@ -1,5 +1,11 @@
 # keep-up
 
+## Authentication
+
+Better Auth provides email/password sign-up, sign-in, sign-out, and database-backed sessions through Drizzle. Set `DATABASE_URL`, `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL`, and `ALLOW_PUBLIC_SIGN_UP` from `.env.example`, then apply migrations with `npm.cmd run db:migrate`. Registration is closed by default. Product routes validate sessions server-side and all product repositories require owner scope.
+
+There is no social login, email verification delivery, password recovery, MFA, organization/family sharing, or production auth configuration yet.
+
 The current milestone is **PostgreSQL Persistence and Transactional Setup Conversion**. Framework-independent orchestration lives in `src/application/season-workflow`, workflow contracts in `src/domain`, and replaceable assistant ports in `src/application/assistant`. Goals remain unrestricted and user-owned; categories, templates, and assistant suggestions cannot determine validity.
 
 Run `npm.cmd test` for the full suite. There is no real assistant provider, chatbot/API integration, interactive workflow UI, authentication, hosted database, or production credential configuration yet.

@@ -7,6 +7,7 @@ const statuses: readonly GoalStatus[] = ["draft", "active", "paused", "completed
 
 export function toGoalRecord(goal: Goal): GoalRecord {
   return {
+    ownerId:goal.ownerId,
     id: goal.id,
     seasonId: goal.seasonId,
     title: goal.title,
@@ -24,6 +25,7 @@ export function toGoalRecord(goal: Goal): GoalRecord {
 export function toGoalDomain(record: GoalRecord): PersistenceResult<Goal> {
   const errors = [];
   if (!isNonEmptyString(record.id)) errors.push(recordError("id", "Goal ID must be a non-empty string."));
+  if (!isNonEmptyString(record.ownerId)) errors.push(recordError("ownerId", "Goal owner ID must be a non-empty string."));
   if (!isNonEmptyString(record.seasonId)) errors.push(recordError("seasonId", "Goal season ID must be a non-empty string."));
   if (!isString(record.title)) errors.push(recordError("title", "Goal title must be a string."));
   if (!isNullableString(record.description)) errors.push(recordError("description", "Goal description must be a string or null."));
@@ -36,6 +38,7 @@ export function toGoalDomain(record: GoalRecord): PersistenceResult<Goal> {
   if (errors.length > 0) return { ok: false, errors };
 
   return persistenceSuccess({
+    ownerId:record.ownerId,
     id: record.id,
     seasonId: record.seasonId,
     title: record.title,

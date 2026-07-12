@@ -7,6 +7,7 @@ import type {
   WeeklyReflectionId,
   WeeklyScorecardId,
 } from "./shared";
+import type { AccountOwnerId } from "./identity";
 
 export interface WeeklyScorecard {
   id: WeeklyScorecardId;
@@ -28,6 +29,7 @@ export interface WeeklyReflection {
 }
 
 export interface SeasonReview {
+  ownerId: AccountOwnerId;
   id: SeasonReviewId;
   seasonId: SeasonId;
   status: "draft" | "ready_for_summary" | "summary_proposed" | "finalized";

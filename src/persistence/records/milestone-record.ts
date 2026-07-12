@@ -1,4 +1,5 @@
 export interface MilestoneRecord {
+  ownerId: string;
   id: string;
   goalId: string;
   title: string;

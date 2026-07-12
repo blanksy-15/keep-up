@@ -16,4 +16,4 @@ export function requireSafeTestDatabaseUrl(environment:NodeJS.ProcessEnv=process
 
 export async function createRealTestDatabase(){const connection=createDatabaseConnection({connectionString:requireSafeTestDatabaseUrl()});return connection;}
 export async function applyMigrations(database:ReturnType<typeof createDatabaseConnection>["database"]){await migrate(database,{migrationsFolder:"drizzle"});}
-export async function cleanDatabase(database:ReturnType<typeof createDatabaseConnection>["database"]){await database.execute(sql`truncate table season_reviews, season_setup_drafts, milestones, outcomes, goals, seasons restart identity cascade`);}
+export async function cleanDatabase(database:ReturnType<typeof createDatabaseConnection>["database"]){await database.execute(sql`truncate table season_reviews, season_setup_drafts, milestones, outcomes, goals, seasons, auth_sessions, auth_accounts, auth_verifications, auth_users restart identity cascade`);}

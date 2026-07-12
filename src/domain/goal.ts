@@ -6,6 +6,7 @@ import type {
   SeasonId,
   Timestamp,
 } from "./shared";
+import type { AccountOwnerId } from "./identity";
 
 export type GoalStatus = "draft" | "active" | "paused" | "completed" | "abandoned";
 
@@ -16,6 +17,7 @@ export type MilestoneStatus =
   | "skipped";
 
 export interface Goal {
+  ownerId: AccountOwnerId;
   id: GoalId;
   seasonId: SeasonId;
   title: string;
@@ -30,6 +32,7 @@ export interface Goal {
 }
 
 export interface Milestone {
+  ownerId: AccountOwnerId;
   id: MilestoneId;
   goalId: GoalId;
   title: string;

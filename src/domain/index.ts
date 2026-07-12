@@ -5,6 +5,7 @@ export * from "./goal";
 export * from "./outcome";
 export * from "./reflection";
 export * from "./season-workflow";
+export * from "./identity";
 export * from "./season";
 export * from "./shared";
 export * from "./behavior";

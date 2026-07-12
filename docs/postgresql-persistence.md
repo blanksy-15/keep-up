@@ -1,5 +1,7 @@
 # PostgreSQL Persistence
 
+Authentication tables and mandatory product owner columns are added by migration `0001`. Owner-plus-parent indexes support scoped access. Existing development product rows are deliberately cleared before ownership becomes non-null because the application has not launched; this strategy is not suitable for production backfills.
+
 PostgreSQL is the first durable database model and Drizzle is the sole ORM/query layer. Production composition uses the standard `pg` driver and a conventional connection string, keeping Neon, Supabase, Vercel, Railway, and other hosting choices interchangeable. No hosted provider or production credentials are selected.
 
 ## Schema and mapping

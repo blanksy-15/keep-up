@@ -1,4 +1,5 @@
 import type { DateRange, SeasonId, Timestamp } from "./shared";
+import type { AccountOwnerId } from "./identity";
 
 export type SeasonStatus = "draft" | "active" | "completed" | "archived";
 
@@ -7,6 +8,7 @@ export interface SeasonIntent {
 }
 
 export interface Season {
+  ownerId: AccountOwnerId;
   id: SeasonId;
   name: string;
   dates: DateRange;

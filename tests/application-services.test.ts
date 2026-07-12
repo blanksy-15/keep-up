@@ -15,8 +15,8 @@ import {
   updateMilestoneStatus,
   updateOutcomeProgress,
   type PlanningApplicationDependencies,
+  type OwnerScopedPlanningUnitOfWork,
 } from "../src/application";
-import type { PlanningUnitOfWork } from "../src/persistence";
 import { persistenceFailure, persistenceSuccess } from "../src/persistence";
 import {
   createTestContext,
@@ -39,7 +39,7 @@ async function seedActiveGoal() {
 
 describe("create season", () => {
   test("creates and saves a deterministic draft season", async () => {
-    const { dependencies, persistence } = createTestContext();
+    const { dependencies,persistence } = createTestContext();
     const result = await createSeason(dependencies, {
       title: " New season ", intent: " Focus clearly ", startDate: "2026-08-01", endDate: "2026-10-31",
     });
@@ -305,11 +305,11 @@ describe("season overview", () => {
   test("returns an integrity failure for inconsistent repository relationships", async () => {
     const { dependencies, persistence } = createTestContext();
     await persistence.seasons.save(seasonFixture());
-    const inconsistent: PlanningUnitOfWork = {
-      ...persistence,
+    const inconsistent: OwnerScopedPlanningUnitOfWork = {
+      ...dependencies.persistence,
       goals: {
-        findById: (id) => persistence.goals.findById(id),
-        save: (value) => persistence.goals.save(value),
+        findById: (id) => dependencies.persistence.goals.findById(id),
+        save: (value) => dependencies.persistence.goals.save(value),
         listBySeasonId: async () => persistenceSuccess([goalFixture({ seasonId: "other-season" })]),
       },
     };
@@ -321,15 +321,15 @@ describe("season overview", () => {
 
 describe("application error mapping", () => {
   test("maps persistence failures without exposing implementation messages", async () => {
-    const { dependencies, persistence } = createTestContext();
-    const failingPersistence: PlanningUnitOfWork = {
-      goals: persistence.goals,
-      outcomes: persistence.outcomes,
-      milestones: persistence.milestones,
+    const { dependencies } = createTestContext();
+    const failingPersistence: OwnerScopedPlanningUnitOfWork = {
+      goals: dependencies.persistence.goals,
+      outcomes: dependencies.persistence.outcomes,
+      milestones: dependencies.persistence.milestones,
       seasons: {
         findById: async () => persistenceFailure({ code: "storage_failure", message: "vendor secret" }),
-        list: () => persistence.seasons.list(),
-        save: (value) => persistence.seasons.save(value),
+        list: () => dependencies.persistence.seasons.list(),
+        save: (value) => dependencies.persistence.seasons.save(value),
       },
     };
     const failingDependencies: PlanningApplicationDependencies = { ...dependencies, persistence: failingPersistence };

@@ -1,5 +1,6 @@
 import type { Outcome } from "../../domain/outcome";
 import type { GoalId, OutcomeId } from "../../domain/shared";
+import type { AccountOwnerId } from "../../domain/identity";
 import type { OutcomeRepository } from "../contracts";
 import { persistenceFailure, persistenceSuccess, type PersistenceResult } from "../errors";
 import { toOutcomeDomain, toOutcomeRecord } from "../mapping";
@@ -8,19 +9,19 @@ import type { OutcomeRecord } from "../records";
 export class InMemoryOutcomeRepository implements OutcomeRepository {
   readonly #records = new Map<OutcomeId, OutcomeRecord>();
 
-  async findById(id: OutcomeId): Promise<PersistenceResult<Outcome | null>> {
+  async findById(ownerOrId:AccountOwnerId,id?: OutcomeId): Promise<PersistenceResult<Outcome | null>> {const ownerId=id?ownerOrId:"owner-a";id??=ownerOrId;
     try {
       const record = this.#records.get(id);
-      return record ? toOutcomeDomain({ ...record }) : persistenceSuccess(null);
+      return record?.ownerId===ownerId ? toOutcomeDomain({ ...record }) : persistenceSuccess(null);
     } catch (cause) {
       return persistenceFailure({ code: "storage_failure", message: "Outcome lookup failed.", cause });
     }
   }
 
-  async listByGoalId(goalId: GoalId): Promise<PersistenceResult<Outcome[]>> {
+  async listByGoalId(ownerOrGoal:AccountOwnerId,goalId?:GoalId): Promise<PersistenceResult<Outcome[]>> {const ownerId=goalId?ownerOrGoal:"owner-a";goalId??=ownerOrGoal;
     try {
       const records = [...this.#records.values()]
-        .filter((record) => record.goalId === goalId)
+        .filter((record) => record.ownerId===ownerId&&record.goalId === goalId)
         .sort((a, b) => a.id.localeCompare(b.id));
       const values: Outcome[] = [];
       for (const record of records) {
@@ -34,9 +35,9 @@ export class InMemoryOutcomeRepository implements OutcomeRepository {
     }
   }
 
-  async save(outcome: Outcome): Promise<PersistenceResult<Outcome>> {
+  async save(ownerOrOutcome:AccountOwnerId|Outcome,value?:Outcome): Promise<PersistenceResult<Outcome>> {const outcome=typeof ownerOrOutcome==="string"?value!:ownerOrOutcome,ownerId=typeof ownerOrOutcome==="string"?ownerOrOutcome:outcome.ownerId;
     try {
-      const record = toOutcomeRecord(outcome);
+      if(outcome.ownerId!==ownerId)return persistenceFailure({code:"conflict",message:"Outcome owner mismatch."});const existing=this.#records.get(outcome.id);if(existing&&existing.ownerId!==ownerId)return persistenceFailure({code:"conflict",message:"Outcome owner mismatch."});const record = toOutcomeRecord(outcome);
       const validation = toOutcomeDomain(record);
       if (!validation.ok) return validation;
       this.#records.set(record.id, { ...record });

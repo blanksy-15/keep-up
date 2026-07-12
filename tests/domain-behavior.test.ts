@@ -20,6 +20,7 @@ const transitionedAt = "2026-07-11T12:00:00.000Z";
 
 function season(overrides: Partial<Season> = {}): Season {
   return {
+    ownerId:"owner-a",
     id: "season-1",
     name: "Build with intention",
     dates: { startDate: "2026-07-01", endDate: "2026-09-30" },
@@ -33,6 +34,7 @@ function season(overrides: Partial<Season> = {}): Season {
 
 function goal(overrides: Partial<Goal> = {}): Goal {
   return {
+    ownerId:"owner-a",
     id: "goal-1",
     seasonId: "season-1",
     title: "Ship the foundation",
@@ -46,6 +48,7 @@ function goal(overrides: Partial<Goal> = {}): Goal {
 
 function outcome(overrides: Partial<Outcome> = {}): Outcome {
   return {
+    ownerId:"owner-a",
     id: "outcome-1",
     goalId: "goal-1",
     description: "Complete the foundation milestones",
@@ -58,6 +61,7 @@ function outcome(overrides: Partial<Outcome> = {}): Outcome {
 
 function milestone(overrides: Partial<Milestone> = {}): Milestone {
   return {
+    ownerId:"owner-a",
     id: "milestone-1",
     goalId: "goal-1",
     title: "Define the domain",

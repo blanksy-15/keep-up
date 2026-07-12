@@ -1,5 +1,11 @@
 # Domain Invariants
 
+- Every authoritative product record has exactly one owner.
+- Repository operations require owner scope; cross-owner records are unreadable and immutable.
+- Owner IDs originate from validated server sessions, never form input.
+- Child records share their parent's owner, and conversion preserves one owner across the graph.
+- Another owner's record normally appears not found to prevent enumeration.
+
 ## Guided season workflows
 
 - Setup drafts are separate from authoritative seasons and never activate planning records.

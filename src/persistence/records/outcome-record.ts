@@ -1,4 +1,5 @@
 export interface OutcomeRecord {
+  ownerId: string;
   id: string;
   goalId: string;
   description: string;

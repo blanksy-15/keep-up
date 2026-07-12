@@ -1,4 +1,5 @@
 import type { CalendarDate, CarryForwardInsightId, SeasonId, SeasonSetupDraftId, Timestamp, WorkflowItemId } from "./shared";
+import type { AccountOwnerId } from "./identity";
 
 export type WorkflowContentSource = "user" | "assistant";
 export type SeasonSetupStatus = "draft" | "ready_for_review" | "confirmed" | "converted" | "abandoned";
@@ -14,6 +15,7 @@ export interface SupportingStructure extends SourcedWorkflowItem {
 export interface SetupCarryForwardContext { insightId: CarryForwardInsightId; insight: string; sourceSeasonId: string; }
 
 export interface SeasonSetupDraft {
+  ownerId: AccountOwnerId;
   id: SeasonSetupDraftId;
   status: SeasonSetupStatus;
   title: string;

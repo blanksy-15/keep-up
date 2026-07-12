@@ -1,5 +1,7 @@
 # Continuous Integration
 
+CI supplies only test Better Auth configuration, applies authentication/ownership migrations, and runs PGlite plus real-PostgreSQL owner-isolation and conversion tests. No production auth secret or user data is used.
+
 GitHub Actions runs `CI` for pushes to `main`, pull requests targeting `main`, and manual dispatches. Stale runs for the same ref are cancelled. The single verification job uses Node 20, `npm ci` with setup-node caching, read-only repository permissions, and an official disposable PostgreSQL 16 service.
 
 The job waits for `pg_isready`, applies committed Drizzle migrations, checks migration history, runs the fast suite (including PGlite), runs the dedicated real-PostgreSQL suite, then runs lint, type checking, and the production build. It never generates migrations, deploys, or accesses production infrastructure.

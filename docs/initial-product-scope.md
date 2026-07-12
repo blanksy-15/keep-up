@@ -1,5 +1,7 @@
 # Initial Product Scope
 
+Separate authenticated accounts and isolated user-owned planning/workflow records are now supported. Product-data forms remain postponed beyond authentication surfaces. Family sharing, invitations, account recovery, social login, and email delivery remain future work.
+
 The framework-independent core includes guided setup, completed-season review, carry-forward context, readiness evaluation, and provider-neutral assistant ports. It excludes provider SDKs, model configuration, API routes, workflow UI, authentication, database adapters, automatic conversion, activation, and automatic next-season creation.
 
 Durable planning adapters and transactional confirmed-setup conversion now exist. Interactive setup UI, authentication, multi-user ownership, hosted database provisioning, assistant/chatbot integration, daily execution persistence, and automatic activation remain postponed.

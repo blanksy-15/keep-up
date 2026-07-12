@@ -1,4 +1,5 @@
 import type { GoalId, OutcomeId, Timestamp } from "./shared";
+import type { AccountOwnerId } from "./identity";
 
 export type OutcomeType = "boolean" | "numeric" | "percentage" | "count";
 
@@ -9,6 +10,7 @@ export interface OutcomeProgress {
 }
 
 export interface Outcome {
+  ownerId: AccountOwnerId;
   id: OutcomeId;
   goalId: GoalId;
   description: string;

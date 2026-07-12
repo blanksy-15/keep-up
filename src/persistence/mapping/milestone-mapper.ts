@@ -7,6 +7,7 @@ const statuses: readonly MilestoneStatus[] = ["not_started", "in_progress", "com
 
 export function toMilestoneRecord(milestone: Milestone): MilestoneRecord {
   return {
+    ownerId:milestone.ownerId,
     id: milestone.id,
     goalId: milestone.goalId,
     title: milestone.title,
@@ -21,6 +22,7 @@ export function toMilestoneRecord(milestone: Milestone): MilestoneRecord {
 export function toMilestoneDomain(record: MilestoneRecord): PersistenceResult<Milestone> {
   const errors = [];
   if (!isNonEmptyString(record.id)) errors.push(recordError("id", "Milestone ID must be a non-empty string."));
+  if (!isNonEmptyString(record.ownerId)) errors.push(recordError("ownerId", "Milestone owner ID must be a non-empty string."));
   if (!isNonEmptyString(record.goalId)) errors.push(recordError("goalId", "Milestone goal ID must be a non-empty string."));
   if (!isString(record.title)) errors.push(recordError("title", "Milestone title must be a string."));
   if (!isString(record.status) || !statuses.includes(record.status as MilestoneStatus)) errors.push(recordError("status", "Milestone status is invalid."));
@@ -31,6 +33,7 @@ export function toMilestoneDomain(record: MilestoneRecord): PersistenceResult<Mi
   if (errors.length > 0) return { ok: false, errors };
 
   return persistenceSuccess({
+    ownerId:record.ownerId,
     id: record.id,
     goalId: record.goalId,
     title: record.title,

@@ -2,13 +2,15 @@
 
 ## Current milestone (2026-07-11)
 
-**Real PostgreSQL Continuous Integration** — GitHub Actions, disposable PostgreSQL 16, real migration/repository/rollback tests, and independent-connection conversion contention. PostgreSQL Persistence and Transactional Setup Conversion is complete.
+**Authentication and Data Ownership** — Better Auth, database-backed sessions, protected routes, authentication surfaces, mandatory record ownership, owner-scoped repositories, and authorization tests. Real PostgreSQL Continuous Integration is complete.
 
 New organization includes `src/application/season-workflow`, `src/application/assistant`, `docs/season-workflow.md`, `docs/assistant-boundaries.md`, and `docs/season-summary-standard.md`.
 
 Database organization includes `src/config`, `src/database/schema`, `src/persistence/postgres`, `drizzle`, and `docs/postgresql-persistence.md`.
 
 CI organization includes `.github/workflows/ci.yml`, `.nvmrc`, real-server tests, and `docs/continuous-integration.md`.
+
+Identity organization includes `src/auth`, `src/application/identity`, the Better Auth API route, sign-in/sign-up pages, migration `0001`, and `docs/authentication-and-ownership.md`.
 
 ### Decisions
 
@@ -36,6 +38,13 @@ CI organization includes `.github/workflows/ci.yml`, `.nvmrc`, real-server tests
 - Independent pools are mandatory for exactly-one-success concurrency verification.
 - Failure injection covers season, goal, outcome, milestone, and final workflow writes.
 - Known-table truncation isolates real-server scenarios; Docker Compose remains omitted and optional local PostgreSQL is documented.
+- Better Auth 1.6 with its Drizzle adapter owns email/password credentials and database sessions.
+- Registration is closed by default; required email verification waits for delivery infrastructure.
+- Better Auth user IDs map to application-owned `AccountOwnerId` values.
+- All authoritative records store non-null owners; repositories bind mandatory owner scope and hide cross-owner existence.
+- The protected server layout validates sessions; UI and cookies alone are never authorization boundaries.
+- Pre-launch development data is cleared by the ownership migration rather than assigned to an arbitrary user.
+- Social login, recovery email, MFA, organizations, family sharing, daily execution, AI providers, and product-data forms remain postponed.
 
 Keep-up is a personal operating system for intentional growth, execution, reflection, and long-term progress. It will bring goals, habits, health, projects, and personal growth into one coherent system that helps a person decide what matters, act consistently, learn from outcomes, and carry useful context forward.
 

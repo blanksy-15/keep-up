@@ -3,8 +3,9 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { NavigationIcon, navigationItems } from "./navigation-items";
+import type { AuthenticatedAccount } from "@/application";
 
-export function DesktopSidebar() {
+export function DesktopSidebar({account}:{account:AuthenticatedAccount}) {
   const pathname = usePathname();
 
   return (
@@ -25,8 +26,8 @@ export function DesktopSidebar() {
         })}
       </nav>
       <div className="sidebar-future">
-        <span className="avatar-placeholder" aria-hidden="true">Y</span>
-        <div><strong>Your space</strong><span>Personal workspace</span></div>
+        <span className="avatar-placeholder" aria-hidden="true">{account.displayName.slice(0,1).toUpperCase()}</span>
+        <div><strong>{account.displayName}</strong><span>{account.email}</span></div>
       </div>
     </aside>
   );

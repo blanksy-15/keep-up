@@ -1,8 +1,9 @@
-import type { Clock, IdGenerator, PlanningApplicationDependencies } from "../../src/application";
+import { scopePlanningPersistence,type Clock, type IdGenerator, type PlanningApplicationDependencies } from "../../src/application";
 import type { Goal, Milestone, Outcome, Season } from "../../src/domain";
 import { InMemoryPlanningUnitOfWork } from "../../src/persistence";
 
 export const fixedTimestamp = "2026-07-11T12:00:00.000Z";
+export const ownerId="owner-a";
 
 export class FixedClock implements Clock {
   constructor(
@@ -34,7 +35,8 @@ export function createTestContext(): {
   return {
     persistence,
     dependencies: {
-      persistence,
+      ownerId,
+      persistence:scopePlanningPersistence(ownerId,persistence),
       clock: new FixedClock(),
       ids: new DeterministicIdGenerator(),
     },
@@ -43,6 +45,7 @@ export function createTestContext(): {
 
 export function seasonFixture(overrides: Partial<Season> = {}): Season {
   return {
+    ownerId,
     id: "season-1",
     name: "Build with intention",
     dates: { startDate: "2026-07-01", endDate: "2026-09-30" },
@@ -56,6 +59,7 @@ export function seasonFixture(overrides: Partial<Season> = {}): Season {
 
 export function goalFixture(overrides: Partial<Goal> = {}): Goal {
   return {
+    ownerId,
     id: "goal-1",
     seasonId: "season-1",
     title: "Ship the foundation",
@@ -69,6 +73,7 @@ export function goalFixture(overrides: Partial<Goal> = {}): Goal {
 
 export function outcomeFixture(overrides: Partial<Outcome> = {}): Outcome {
   return {
+    ownerId,
     id: "outcome-1",
     goalId: "goal-1",
     description: "Complete foundation work",
@@ -81,6 +86,7 @@ export function outcomeFixture(overrides: Partial<Outcome> = {}): Outcome {
 
 export function milestoneFixture(overrides: Partial<Milestone> = {}): Milestone {
   return {
+    ownerId,
     id: "milestone-1",
     goalId: "goal-1",
     title: "Define application services",

@@ -46,6 +46,7 @@ export async function createSeason(
 
   const timestamp = dependencies.clock.now();
   const season: Season = {
+    ownerId:dependencies.ownerId,
     id,
     name: input.title.trim(),
     dates: { startDate: input.startDate, endDate: input.endDate },
@@ -79,6 +80,7 @@ export async function createGoal(
 
   const timestamp = dependencies.clock.now();
   const goal: Goal = {
+    ownerId:dependencies.ownerId,
     id,
     seasonId: parent.value.id,
     title: input.title.trim(),

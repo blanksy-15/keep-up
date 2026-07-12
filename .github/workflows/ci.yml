@@ -34,6 +34,9 @@ jobs:
           --health-retries 10
     env:
       DATABASE_URL: postgresql://keep_up_test:keep_up_test@127.0.0.1:5432/keep_up_test
+      BETTER_AUTH_SECRET: ci-only-secret-that-is-longer-than-thirty-two-characters
+      BETTER_AUTH_URL: http://localhost:3000
+      ALLOW_PUBLIC_SIGN_UP: "true"
     steps:
       - name: Checkout
         uses: actions/checkout@v4

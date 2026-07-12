@@ -7,6 +7,7 @@ const types: readonly OutcomeType[] = ["boolean", "numeric", "percentage", "coun
 
 export function toOutcomeRecord(outcome: Outcome): OutcomeRecord {
   return {
+    ownerId:outcome.ownerId,
     id: outcome.id,
     goalId: outcome.goalId,
     description: outcome.description,
@@ -22,6 +23,7 @@ export function toOutcomeRecord(outcome: Outcome): OutcomeRecord {
 export function toOutcomeDomain(record: OutcomeRecord): PersistenceResult<Outcome> {
   const errors = [];
   if (!isNonEmptyString(record.id)) errors.push(recordError("id", "Outcome ID must be a non-empty string."));
+  if (!isNonEmptyString(record.ownerId)) errors.push(recordError("ownerId", "Outcome owner ID must be a non-empty string."));
   if (!isNonEmptyString(record.goalId)) errors.push(recordError("goalId", "Outcome goal ID must be a non-empty string."));
   if (!isString(record.description)) errors.push(recordError("description", "Outcome description must be a string."));
   if (!isString(record.type) || !types.includes(record.type as OutcomeType)) errors.push(recordError("type", "Outcome type is invalid."));
@@ -37,6 +39,7 @@ export function toOutcomeDomain(record: OutcomeRecord): PersistenceResult<Outcom
   if (errors.length > 0) return { ok: false, errors };
 
   return persistenceSuccess({
+    ownerId:record.ownerId,
     id: record.id,
     goalId: record.goalId,
     description: record.description,

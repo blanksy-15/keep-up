@@ -1,4 +1,5 @@
 export interface SeasonRecord {
+  ownerId: string;
   id: string;
   name: string;
   startDate: string;

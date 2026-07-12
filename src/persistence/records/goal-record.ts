@@ -1,4 +1,5 @@
 export interface GoalRecord {
+  ownerId: string;
   id: string;
   seasonId: string;
   title: string;
