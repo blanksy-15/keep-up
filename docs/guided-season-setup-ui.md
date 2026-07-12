@@ -1,0 +1,11 @@
+# Guided Season Setup UI
+
+This is the first complete authenticated product workflow. It is fully manual: users create durable setup drafts, edit foundation details, brainstorm priorities, add unrestricted goals and measurable boolean/numeric/percentage/count outcomes, review readiness, confirm explicitly, and convert transactionally into an owner-scoped draft season.
+
+Routes are `/season`, `/season/setup`, `/season/setup/new`, `/season/setup/[setupDraftId]`, `/season/setup/[setupDraftId]/review`, `/season/setup/[setupDraftId]/complete`, and `/season/[seasonId]`. `src/server/planning` is the thin server adapter: it requires the Better Auth session, derives the owner, composes owner-bound application dependencies, calls existing services, translates failures into safe action state, revalidates private paths, and redirects only after success. UI never calls repositories or Drizzle directly.
+
+Native forms and narrow client components provide pending states and repeated sections. Actions parse and trim input, validate dates and targets, and leave application/domain validation authoritative. PostgreSQL is the source of truth, so refresh and reopening preserve drafts. Confirmation re-evaluates blockers, locks the proposal, and does not create or activate records. Conversion uses the existing PostgreSQL transaction runner, row locking, authoritative ID allocation, proposal mappings, unsupported-item reporting, and exactly-once status checks.
+
+Milestone editing is omitted because the current setup contracts do not provide a complete proposal editor; existing milestone proposals still convert. AI assistance, activation, daily execution, reflections, dashboards, and Playwright remain postponed. Authenticated pages are dynamic and request-scoped, so owner data is never publicly cached. Cross-owner reads appear not found and client owner IDs are never trusted.
+
+The fast suite includes guided setup validation alongside existing domain, application, PGlite, authentication, ownership, rollback, and conversion coverage. Real PostgreSQL tests run with `npm.cmd run test:postgres` when a safe database exists. Manual browser verification requires local PostgreSQL and is reported separately when unavailable.

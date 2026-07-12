@@ -109,3 +109,6 @@ Node's existing built-in test setup covers record round trips, malformed reconst
 ## Criteria for selecting production storage
 
 A later decision should be based on proven application queries and atomic operations; deployment and operational constraints; transaction and referential-integrity needs; backup, migration, and recovery requirements; privacy and ownership requirements; expected scale; local-development ergonomics; and the ability to implement these repository contracts without leaking vendor behavior into domain logic.
+# Guided setup persistence
+
+Setup actions use the existing owner-scoped repositories and PostgreSQL transaction runner through a server-only adapter. The browser never receives a repository or database client.

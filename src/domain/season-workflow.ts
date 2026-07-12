@@ -4,8 +4,8 @@ import type { AccountOwnerId } from "./identity";
 export type WorkflowContentSource = "user" | "assistant";
 export type SeasonSetupStatus = "draft" | "ready_for_review" | "confirmed" | "converted" | "abandoned";
 
-export interface SourcedWorkflowItem { id: WorkflowItemId; text: string; source: WorkflowContentSource; }
-export interface ProposedOutcome extends SourcedWorkflowItem { targetValue?: number | boolean; unit?: string; }
+export interface SourcedWorkflowItem { id: WorkflowItemId; text: string; source: WorkflowContentSource; selected?: boolean; }
+export interface ProposedOutcome extends SourcedWorkflowItem { type?: "boolean" | "numeric" | "percentage" | "count"; targetValue?: number | boolean; unit?: string; }
 export interface ProposedGoal extends SourcedWorkflowItem { outcomeIds: WorkflowItemId[]; }
 export interface SupportingStructure extends SourcedWorkflowItem {
   kind: "milestone" | "habit" | "recurring_action" | "project";

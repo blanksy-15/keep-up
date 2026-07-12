@@ -1,8 +1,8 @@
 # Vision
 
-## Current milestone (2026-07-11)
+## Current milestone (2026-07-12)
 
-**Authentication and Data Ownership** — Better Auth, database-backed sessions, protected routes, authentication surfaces, mandatory record ownership, owner-scoped repositories, and authorization tests. Real PostgreSQL Continuous Integration is complete.
+**Guided Season Setup UI** — authenticated, mobile-first manual setup routes and server actions backed by durable owner-scoped drafts and transactional conversion. Authentication and Data Ownership is complete.
 
 New organization includes `src/application/season-workflow`, `src/application/assistant`, `docs/season-workflow.md`, `docs/assistant-boundaries.md`, and `docs/season-summary-standard.md`.
 
@@ -11,6 +11,8 @@ Database organization includes `src/config`, `src/database/schema`, `src/persist
 CI organization includes `.github/workflows/ci.yml`, `.nvmrc`, real-server tests, and `docs/continuous-integration.md`.
 
 Identity organization includes `src/auth`, `src/application/identity`, the Better Auth API route, sign-in/sign-up pages, migration `0001`, and `docs/authentication-and-ownership.md`.
+
+Guided setup organization includes `src/server/planning`, `src/components/season-setup`, the `/season/setup` route hierarchy, and `docs/guided-season-setup-ui.md`. Request-scoped dynamic rendering protects private owner data. Explicit save actions, readiness review, confirmation, and transactional conversion are connected end to end; resulting seasons remain draft.
 
 ### Decisions
 

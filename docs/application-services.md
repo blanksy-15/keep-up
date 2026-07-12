@@ -114,3 +114,6 @@ Application services are tested against isolated in-memory units of work using a
 - Caching, jobs, events, and deployment configuration
 
 No production persistence or user identity exists. Daily execution remains outside this milestone.
+# UI adapter note
+
+The guided setup UI calls the existing season-workflow application services through `src/server/planning`. Route components do not call repositories or Drizzle, and ownership is bound once from the request session.

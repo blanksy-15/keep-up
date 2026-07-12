@@ -1,21 +1,15 @@
-import type { Metadata } from "next";
+import Link from "next/link";
 import { PageHeader } from "@/components/app-shell";
-import { Button, Card, SectionHeading } from "@/components/ui";
-
-export const metadata: Metadata = { title: "Season" };
-
-export default function SeasonPage() {
-  return (
-    <>
-      <PageHeader eyebrow="April 20 – July 19" title="Build with intention" description="Create a durable foundation, strengthen daily rhythms, and finish the season with useful evidence—not noise." action={<Button disabled>Edit season · unavailable</Button>} />
-      <div className="content-stack">
-        <Card className="intent-card"><p className="eyebrow">Season intent</p><blockquote>Choose fewer commitments, give them sustained attention, and finish what creates lasting value.</blockquote></Card>
-        <section><SectionHeading title="Season goals" description="Static planning examples for the shell milestone." />
-          <div className="goal-card-grid">
-            {[{n:"01",title:"Ship a durable foundation",outcome:"A production-ready application foundation with clear product boundaries.",progress:"72%",milestones:["Product definition complete","Application shell in progress"]},{n:"02",title:"Build a movement rhythm",outcome:"Move intentionally at least four days each week.",progress:"58%",milestones:["Eight consistent weeks","Choose next training block"]},{n:"03",title:"Read and synthesize",outcome:"Finish six books and capture one useful idea from each.",progress:"67%",milestones:["Four books complete","Two summaries remaining"]}].map(goal=><Card key={goal.n} className="goal-card"><span className="goal-card__number">{goal.n}</span><h3>{goal.title}</h3><p>{goal.outcome}</p><div className="goal-card__progress"><span>Outcome progress</span><strong>{goal.progress}</strong></div><ul>{goal.milestones.map(m=><li key={m}>{m}</li>)}</ul></Card>)}
-          </div>
-        </section>
-      </div>
-    </>
-  );
+import { Button, Card } from "@/components/ui";
+import { listSeasonIndex } from "@/server/planning/queries";
+export const dynamic = "force-dynamic";
+export default async function SeasonPage() {
+  const { seasons, drafts } = await listSeasonIndex();
+  return <>
+    <PageHeader eyebrow="Planning" title="Seasons with intention" description="Build a season deliberately, then keep its authoritative plan separate from the setup proposal." action={<Link href="/season/setup/new"><Button tone="primary">Start a new setup</Button></Link>} />
+    <div className="content-stack">
+      <section><h2>Your seasons</h2>{seasons.length ? <div className="goal-card-grid">{seasons.map(season => <Card key={season.id}><p className="eyebrow">{season.status}</p><h3>{season.name}</h3><p className="muted">{season.dates.startDate} to {season.dates.endDate}</p><Link href={`/season/${season.id}`}><Button>Open season</Button></Link></Card>)}</div> : <Card><div className="empty-state"><h3>No seasons yet</h3><p>Your first confirmed setup will appear here as a draft season.</p></div></Card>}</section>
+      <section><h2>Setup drafts</h2>{drafts.length ? <div className="content-stack">{drafts.map(draft => <Card key={draft.id}><div className="setup-index-row"><div><p className="eyebrow">{draft.status.replaceAll("_", " ")}</p><h3>{draft.title || "Untitled season"}</h3></div><Link href={draft.status === "converted" && draft.targetSeasonId ? `/season/${draft.targetSeasonId}` : draft.status === "confirmed" ? `/season/setup/${draft.id}/complete` : draft.status === "ready_for_review" ? `/season/setup/${draft.id}/review` : `/season/setup/${draft.id}`}><Button>{draft.status === "converted" ? "Open season" : draft.status === "ready_for_review" ? "Review" : draft.status === "confirmed" ? "Create" : "Resume"}</Button></Link></div></Card>)}</div> : <Card><p className="muted">No setup drafts. Start one when you are ready to plan.</p></Card>}</section>
+    </div>
+  </>;
 }

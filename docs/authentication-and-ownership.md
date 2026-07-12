@@ -13,3 +13,6 @@ The Better Auth catch-all route owns authentication transport. The protected App
 Migration `0001` creates auth tables, clears only pre-launch disposable product records, and then makes ownership non-null. This is acceptable solely because no production data or launch exists. A production system with records would require a staged nullable-column migration and an explicit audited claim/backfill operation—never an arbitrary default user.
 
 Tests use synthetic users and credentials only. PGlite covers auth and owner boundaries; PostgreSQL CI covers owner-scoped SQL, conversion, locking, and migration behavior. No public production deployment or production secrets are configured.
+# Authenticated product workflow
+
+Guided setup routes and actions derive ownership from the validated Better Auth session. Client forms never submit an owner ID, and private reads use dynamic request-scoped rendering.

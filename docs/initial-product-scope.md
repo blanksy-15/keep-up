@@ -90,3 +90,6 @@ The first coherent release supports one person through one complete season lifec
 - Final production domain and URL structure
 
 These questions are intentionally not resolved by the current TypeScript contracts or documentation.
+# Guided setup milestone
+
+Manual authenticated season setup is now included. AI assistance, activation, daily execution, reflections, notifications, analytics, and broader dashboard integration remain postponed.

@@ -75,3 +75,6 @@ No persistence, task generation, scheduling, completion behavior, check-in submi
 - Five mobile navigation destinations fit the current shell; an overflow strategy may be reconsidered if navigation expands.
 - The 1024 px sidebar breakpoint and current visual values are initial shell decisions, not a permanent design system.
 - Settings and the future workspace/account area are structural placeholders only.
+# Planning destination
+
+The existing Season navigation destination now leads to an authenticated owner-scoped season index with links into guided setup. Setup routes stay out of primary bottom navigation and provide their own step context.

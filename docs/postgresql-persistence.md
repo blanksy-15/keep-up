@@ -25,3 +25,6 @@ The transaction runner supplies transaction-bound planning and workflow reposito
 Fast database tests apply committed migrations to fresh PGlite databases. CI additionally uses PostgreSQL 16 with the standard `pg` driver, applies migrations twice to verify idempotent recognition, and uses independent pools to prove `FOR UPDATE` contention, exactly-one-success conversion, idempotency, and rollback. Known tables are truncated between real-server scenarios. These results cover the tested engine and driver versions; hosting, pooling, backup, monitoring, and operational configuration remain undecided.
 
 No authentication, ownership, row-level security, or multi-user safety exists. The schema is single-user only by omission, not permanent design; trusted multi-user support requires a deliberate ownership migration. Application pages remain disconnected. Conversion creates draft records only. Daily execution, hosted provisioning, deployment, and destructive deletion remain postponed.
+# UI-backed persistence
+
+Guided setup reads and writes are request-scoped and durable in PostgreSQL. Conversion remains the existing transactional operation; resulting seasons are draft until a future explicit activation workflow.

@@ -83,3 +83,6 @@ Labels mean:
 - **Undecided:** Whether there may be more than one daily check-in per calendar date.
 - **Undecided:** How edits to historical check-ins, reflections, schedules, and outcome progress are versioned.
 - **Undecided:** How outcome and weekly scorecard values are calculated or aggregated.
+# Setup UI invariants
+
+Goals remain unrestricted and user-authored. Readiness blockers prevent confirmation, warnings do not, confirmation locks the workflow proposal, and conversion does not activate the resulting season.
