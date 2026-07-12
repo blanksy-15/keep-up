@@ -4,7 +4,7 @@ Keep-up is a long-term personal operating system for goals, habits, health, proj
 
 ## Status
 
-The project is in **Product and Domain Definition**. It contains the application framework, product/domain documentation, and lightweight TypeScript contracts; product features have not been implemented.
+The project is in **Application Shell and Design Foundation**. It contains a responsive static application shell, representative product surfaces, product/domain documentation, and lightweight TypeScript contracts. Real product behavior has not been implemented.
 
 Keep-up is intended to be mobile-first. A fast daily execution experience for priorities, due work, completion, and lightweight check-ins is a central product capability alongside deeper planning and reflection. The final production URL and custom domain have not been selected.
 
@@ -43,6 +43,18 @@ npm run lint
 npm run typecheck
 ```
 
+## Application structure
+
+The root route redirects to `/today`. Current static product routes are:
+
+- `/today` — mobile-first daily execution preview
+- `/dashboard` — season planning and progress overview
+- `/season` — season intent, goals, outcomes, and milestones
+- `/reflection` — weekly activity, scorecard, and reflection preview
+- `/settings` — unavailable future settings categories
+
+All displayed tasks, scores, check-ins, reflections, and progress values are illustrative placeholders. Controls do not save or mutate data.
+
 ## Production build
 
 ```bash
@@ -65,5 +77,6 @@ Documentation is part of the implementation. Update relevant documentation along
 - [Initial product scope](./docs/initial-product-scope.md) — included, postponed, and undecided work
 - [Domain invariants](./docs/domain-invariants.md) — accepted, proposed, and unresolved rules
 - [Mobile-first principles](./docs/mobile-first-principles.md) — guidance for the future daily experience
+- [Application shell](./docs/application-shell.md) — routes, responsive navigation, design tokens, accessibility, and placeholder policy
 
 Any future change to architecture, scope, roadmap, conventions, or a major decision must update the relevant documentation and `PROJECT_PLAN.md` in the same change.

@@ -50,7 +50,10 @@ Current structure:
 keep-up/
 ├── docs/               # Product vocabulary, boundaries, workflows, scope, and principles
 ├── src/
-│   ├── app/            # App Router routes, layouts, metadata, and global styles
+│   ├── app/            # App Router routes, layouts, static product pages, and global styles
+│   ├── components/
+│   │   ├── app-shell/  # Responsive shell, navigation, and page headers
+│   │   └── ui/         # Small reusable presentation primitives
 │   └── domain/         # Framework-independent domain contracts
 ├── PROJECT_PLAN.md     # Living architecture and roadmap
 └── configuration files
@@ -61,6 +64,8 @@ The initial structure deliberately retains only directories with immediate value
 - `src/app`: routing and route composition; route files should remain thin.
 - `docs`: product and domain definitions that govern later implementation decisions.
 - `src/domain`: framework-independent types for stable core concepts; no UI, persistence, or runtime services.
+- `src/components/app-shell`: responsive application framing and navigation shared by product routes.
+- `src/components/ui`: modest, immediately used visual primitives rather than a general component library.
 - `public`: static assets once the application has assets to serve.
 - `src/components`: reusable, domain-agnostic UI when shared components actually exist.
 - `src/features/<domain>`: domain-oriented modules containing a capability's business concepts and application logic.
@@ -103,8 +108,8 @@ The future Today View, or equivalent daily execution surface, is a primary appli
 # Initial Roadmap
 
 1. **Project initialization** — completed; established the buildable framework, repository, and living documentation.
-2. **Product and domain definition** — current; clarify vocabulary, user needs, boundaries, and initial workflows.
-3. **Application shell and design foundation** — establish navigation, layout, accessibility, and visual conventions.
+2. **Product and domain definition** — completed; clarified vocabulary, user needs, boundaries, and initial workflows.
+3. **Application shell and design foundation** — current; establish navigation, layout, accessibility, and visual conventions.
 4. **Core season and goal domain modeling** — define behavior and rules independently of persistence and presentation.
 5. **Initial persistence layer** — select and introduce storage behind explicit data-access boundaries.
 6. **Personal dashboard** — compose the primary user's essential views and actions.
@@ -181,6 +186,66 @@ Milestone ordering may change as requirements become clearer. Detailed implement
 
 **Consequences:** Initial contracts contain no user IDs, storage assumptions, provider code, or production URL configuration.
 
+## 2026-07-11 — Use `/today` as the initial default application route
+
+**Status:** Accepted
+
+**Context:** The daily execution surface is a central mobile-first experience and needs a concrete shell route.
+
+**Decision:** Redirect `/` to `/today` for the initial application shell.
+
+**Consequences:** Today remains a working name and the route or default landing behavior may change after workflow validation.
+
+## 2026-07-11 — Adapt primary navigation by viewport
+
+**Status:** Accepted
+
+**Context:** Phone use benefits from reachable bottom navigation while wider layouts can provide persistent context.
+
+**Decision:** Use a five-destination bottom navigation on mobile and a persistent left sidebar at desktop widths.
+
+**Consequences:** Both navigation modes share destinations and active-route semantics; future growth may require revisiting mobile overflow.
+
+## 2026-07-11 — Establish semantic CSS design tokens
+
+**Status:** Accepted
+
+**Context:** The shell needs consistent visual language without committing to a large component or theme system.
+
+**Decision:** Define a restrained set of semantic CSS tokens for color, spacing, dimensions, radius, focus, and elevation.
+
+**Consequences:** Visual components consume semantic values, and dark mode remains postponed until a complete accessible palette is justified.
+
+## 2026-07-11 — Use static representative shell data
+
+**Status:** Accepted
+
+**Context:** Page hierarchy and responsive behavior must be evaluated before persistence and domain behavior exist.
+
+**Decision:** Use clearly illustrative local page data and disabled/non-functional controls during this milestone.
+
+**Consequences:** Displayed progress, tasks, check-ins, reflections, and scores are not records or accepted calculation rules.
+
+## 2026-07-11 — Keep the shell independent from persistence
+
+**Status:** Accepted
+
+**Context:** Persistence, generation, scheduling, and interaction rules remain unresolved or postponed.
+
+**Decision:** Implement presentation structure without data access, APIs, server actions, domain services, or working mutations.
+
+**Consequences:** Later behavior must enter through explicit application and domain boundaries rather than becoming embedded in UI components.
+
+## 2026-07-11 — Isolate client-only navigation behavior
+
+**Status:** Accepted
+
+**Context:** Active-route indication requires the current pathname, while the rest of the static shell needs no browser behavior.
+
+**Decision:** Prefer Server Components and isolate `usePathname` to the desktop and mobile navigation renderers.
+
+**Consequences:** Product layouts and pages remain server-rendered, and no global client state is introduced.
+
 # Product and Domain Documents
 
 - [Domain glossary](./docs/domain-glossary.md)
@@ -189,21 +254,22 @@ Milestone ordering may change as requirements become clearer. Detailed implement
 - [Initial product scope](./docs/initial-product-scope.md)
 - [Domain invariants](./docs/domain-invariants.md)
 - [Mobile-first principles](./docs/mobile-first-principles.md)
+- [Application shell and design foundation](./docs/application-shell.md)
 
 # Unresolved Product Questions
 
-Important open questions are maintained in [Initial Product Scope](./docs/initial-product-scope.md). The highest-impact questions concern season length and goal limits; stored versus generated daily tasks and stable occurrence identities; habit versus recurring-action and project versus goal models; rollover and deferral history; check-in contents and editing; reflection version history; score calculation; and the Today View's name, route, navigation, and landing-page role. Final production domain and URL structure are postponed.
+Important open questions are maintained in [Initial Product Scope](./docs/initial-product-scope.md). The highest-impact questions concern season length and goal limits; stored versus generated daily tasks and stable occurrence identities; habit versus recurring-action and project versus goal models; rollover and deferral history; check-in contents and editing; reflection version history; score calculation; and whether Today remains the final name, route, navigation position, and landing page. Final production domain, URL structure, dark mode, and expanded-navigation behavior remain postponed.
 
 # Current Milestone
 
-## Product and Domain Definition
+## Application Shell and Design Foundation
 
-**Current objective:** Establish shared terminology, domain boundaries, primary-user workflows, initial scope, stable proposed invariants, and lightweight framework-independent contracts before building features.
+**Current objective:** Establish a production-quality responsive shell, route hierarchy, accessible navigation, semantic design tokens, and reusable presentation primitives using static representative content.
 
-**Included work:** Product and domain documentation, season and daily-execution workflows, mobile-first principles, conservative TypeScript contracts, and updates to living project guidance.
+**Included work:** `/today`, `/dashboard`, `/season`, `/reflection`, and `/settings`; root redirect; mobile bottom navigation; desktop sidebar; responsive page composition; accessibility foundations; static preview content; and shell documentation.
 
-**Explicitly excluded work:** UI and routes, runtime domain behavior, authentication, persistence, schemas, APIs, AI, analytics, notifications, accounts, scheduling/task generation, and production/custom domain configuration.
+**Explicitly excluded work:** Real interaction and domain behavior, authentication, persistence, schemas, APIs, server actions, AI, analytics, notifications, accounts, scheduling/task generation, forms, and production/custom domain configuration.
 
-**Completion criteria:** Required documents and contracts agree; uncertainty is preserved rather than encoded as behavior; lint, type checking, and production build pass; and no application feature or dependency is introduced.
+**Completion criteria:** All routes render successfully; `/` redirects to `/today`; navigation adapts between phone and desktop; active routes and focus states are accessible; representative layouts avoid horizontal overflow; lint, type checking, and production build pass; and no real behavior or dependency is introduced.
 
-**Next decision point:** Use the approved product model to define the application shell and design foundation without prematurely implementing unresolved domain behavior.
+**Next decision point:** Define core season and goal behavior independently of persistence and presentation, while preserving unresolved daily-task modeling questions.

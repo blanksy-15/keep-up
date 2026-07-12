@@ -78,7 +78,7 @@ The first coherent release supports one person through one complete season lifec
 
 ### Product surface and deployment
 
-- Whether the Today View is the default application landing page
+- Whether the initial `/today` landing behavior remains the long-term default
 - What the Today View should be named
 - The future route for the daily view
 - Final production domain and URL structure
