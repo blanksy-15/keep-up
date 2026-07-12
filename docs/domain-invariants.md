@@ -23,12 +23,20 @@ Labels mean:
 - **Accepted:** Archived or completed records do not disappear merely because a new season begins.
 - **Accepted:** Daily execution records remain available to weekly and seasonal reflection.
 - **Accepted:** A product view such as Today View does not own domain data.
+- **Accepted:** Completed seasons cannot return to active.
+- **Accepted:** Completed and abandoned goals are terminal and remain in season history.
+- **Accepted:** Goal completion is an explicit lifecycle transition and is never inferred from progress.
+- **Accepted:** Outcome and milestone progress do not silently alter goal lifecycle status.
+- **Accepted:** Domain transition functions return new values and do not mutate their inputs.
+- **Accepted:** Invalid lifecycle transitions and invalid progress values produce structured domain errors.
+- **Accepted:** Abandoned goals remain in historical counts but are excluded from progress averages.
+- **Accepted:** Archival retains existing lifecycle timestamps and historical data.
 
 ## Proposed
 
 - **Proposed:** Weekly reflections must not silently overwrite prior historical content; the exact edit/version mechanism is undecided.
 - **Proposed:** Progress updates preserve enough history to support later reflection and analytics; the required granularity is undecided.
-- **Proposed:** A season's date range has a start no later than its end.
+- **Accepted:** An active season has a start date no later than its end date.
 - **Proposed:** Completion records should retain a link to the originating source when one exists, even if the source is later archived.
 - **Proposed:** Season Review becomes the authoritative user-authored closing interpretation while remaining editable only under an explicit future policy.
 

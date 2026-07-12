@@ -6,3 +6,4 @@ export * from "./outcome";
 export * from "./reflection";
 export * from "./season";
 export * from "./shared";
+export * from "./behavior";

@@ -51,7 +51,7 @@ The first coherent release supports one person through one complete season lifec
 - Standard season length versus user-selected dates
 - Maximum number of active goals
 - Whether projects are distinct from goals
-- How outcomes are scored
+- How normalized outcome progress may contribute to broader scoring beyond the initial unweighted primitives
 - Whether health metrics require specialized handling
 - How weekly scorecards calculate an overall score
 

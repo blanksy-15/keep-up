@@ -1,9 +1,9 @@
 import type { GoalId, OutcomeId, Timestamp } from "./shared";
 
-export type OutcomeType = "binary" | "numeric" | "percentage" | "descriptive";
+export type OutcomeType = "boolean" | "numeric" | "percentage" | "count";
 
 export interface OutcomeProgress {
-  value?: number;
+  value: number;
   note?: string;
   recordedAt: Timestamp;
 }

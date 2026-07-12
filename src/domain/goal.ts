@@ -7,7 +7,13 @@ import type {
   Timestamp,
 } from "./shared";
 
-export type GoalStatus = "planned" | "active" | "completed" | "paused" | "cancelled";
+export type GoalStatus = "draft" | "active" | "paused" | "completed" | "abandoned";
+
+export type MilestoneStatus =
+  | "not_started"
+  | "in_progress"
+  | "completed"
+  | "skipped";
 
 export interface Goal {
   id: GoalId;
@@ -17,14 +23,21 @@ export interface Goal {
   status: GoalStatus;
   createdAt: Timestamp;
   updatedAt: Timestamp;
+  activatedAt?: Timestamp;
+  pausedAt?: Timestamp;
+  completedAt?: Timestamp;
+  abandonedAt?: Timestamp;
 }
 
 export interface Milestone {
   id: MilestoneId;
   goalId: GoalId;
   title: string;
+  status: MilestoneStatus;
   targetDate?: CalendarDate;
   completedAt?: Timestamp;
+  skippedAt?: Timestamp;
+  updatedAt?: Timestamp;
 }
 
 /** A coordinated body of work. Whether projects remain distinct from goals is undecided. */

@@ -54,7 +54,10 @@ keep-up/
 │   ├── components/
 │   │   ├── app-shell/  # Responsive shell, navigation, and page headers
 │   │   └── ui/         # Small reusable presentation primitives
-│   └── domain/         # Framework-independent domain contracts
+│   └── domain/
+│       ├── behavior/   # Pure lifecycle, validation, progress, and summary functions
+│       └── *.ts        # Framework-independent domain contracts
+├── tests/              # Focused domain behavior tests using Node's test runner
 ├── PROJECT_PLAN.md     # Living architecture and roadmap
 └── configuration files
 ```
@@ -63,7 +66,8 @@ The initial structure deliberately retains only directories with immediate value
 
 - `src/app`: routing and route composition; route files should remain thin.
 - `docs`: product and domain definitions that govern later implementation decisions.
-- `src/domain`: framework-independent types for stable core concepts; no UI, persistence, or runtime services.
+- `src/domain`: framework-independent types for stable core concepts; no UI or persistence concerns.
+- `src/domain/behavior`: pure immutable lifecycle, validation, progress, and summary behavior with structured results.
 - `src/components/app-shell`: responsive application framing and navigation shared by product routes.
 - `src/components/ui`: modest, immediately used visual primitives rather than a general component library.
 - `public`: static assets once the application has assets to serve.
@@ -109,8 +113,8 @@ The future Today View, or equivalent daily execution surface, is a primary appli
 
 1. **Project initialization** — completed; established the buildable framework, repository, and living documentation.
 2. **Product and domain definition** — completed; clarified vocabulary, user needs, boundaries, and initial workflows.
-3. **Application shell and design foundation** — current; establish navigation, layout, accessibility, and visual conventions.
-4. **Core season and goal domain modeling** — define behavior and rules independently of persistence and presentation.
+3. **Application shell and design foundation** — completed; established navigation, layout, accessibility, and visual conventions.
+4. **Core season and goal domain modeling** — current; define behavior and rules independently of persistence and presentation.
 5. **Initial persistence layer** — select and introduce storage behind explicit data-access boundaries.
 6. **Personal dashboard** — compose the primary user's essential views and actions.
 7. **Weekly scorecards and reflection** — support review, learning, and planning cycles.
@@ -246,6 +250,76 @@ Milestone ordering may change as requirements become clearer. Detailed implement
 
 **Consequences:** Product layouts and pages remain server-rendered, and no global client state is introduced.
 
+## 2026-07-11 — Establish an explicit season lifecycle
+
+**Status:** Accepted
+
+**Context:** Season history requires deliberate transitions rather than implicit status mutation.
+
+**Decision:** Use draft, active, completed, and archived season states. Archived is initially a terminal lifecycle state; completed seasons may be archived while retaining completion history.
+
+**Consequences:** Draft cannot complete directly, completed cannot reactivate, and archiving an active season does not imply completion.
+
+## 2026-07-11 — Establish an explicit goal lifecycle
+
+**Status:** Accepted
+
+**Context:** Pausing, completing, and abandoning goals have distinct historical meaning.
+
+**Decision:** Use draft, active, paused, completed, and abandoned goal states. Completed and abandoned are terminal; paused goals must reactivate before completion.
+
+**Consequences:** Goals are not deleted as lifecycle behavior and remain represented in season history.
+
+## 2026-07-11 — Use pure immutable transitions and structured errors
+
+**Status:** Accepted
+
+**Context:** Core behavior must be testable and independent from presentation, transport, and persistence.
+
+**Decision:** Implement transitions as pure functions returning new values through `DomainResult`, with explicit transition, validation, and progress errors.
+
+**Consequences:** Expected domain failures do not rely on generic exceptions, and source objects remain unchanged.
+
+## 2026-07-11 — Support four initial outcome types
+
+**Status:** Accepted
+
+**Context:** Initial goals need understandable measurement without speculative formulas.
+
+**Decision:** Support boolean, numeric-target, percentage, and count outcomes. Preserve raw values while clamping normalized display progress to `0–100%`.
+
+**Consequences:** Zero/negative targets and invalid progress values are rejected; ranges, weighting, reverse metrics, and forecasting remain postponed.
+
+## 2026-07-11 — Keep goal completion explicit
+
+**Status:** Accepted
+
+**Context:** Measured progress and user intent are related but not interchangeable.
+
+**Decision:** Outcome and milestone progress never changes goal lifecycle automatically; goal completion requires an explicit transition.
+
+**Consequences:** A completed goal need not display exactly `100%`, and progress updates cannot silently complete or reopen it.
+
+## 2026-07-11 — Use transparent unweighted summaries
+
+**Status:** Accepted
+
+**Context:** Dashboard-supporting summaries are useful, but a motivational or weighted score would be premature.
+
+**Decision:** Average outcome progress equally; exclude draft and abandoned goals from season progress averages, include active/paused/completed goals, and retain every status in historical counts. Exclude skipped milestones from their progress denominator.
+
+**Consequences:** Empty aggregates return `null`, abandoned work stays visible historically, and no single motivational score is produced.
+
+## 2026-07-11 — Test domain behavior with Node's built-in runner
+
+**Status:** Accepted
+
+**Context:** Pure TypeScript behavior needs focused tests without browser or component infrastructure.
+
+**Decision:** Compile tests with a dedicated TypeScript configuration and run them with `node:test` through `npm test`.
+
+**Consequences:** The project gains deterministic domain tests without adding a dependency; browser and UI tests remain outside this milestone.
+
 # Product and Domain Documents
 
 - [Domain glossary](./docs/domain-glossary.md)
@@ -255,6 +329,7 @@ Milestone ordering may change as requirements become clearer. Detailed implement
 - [Domain invariants](./docs/domain-invariants.md)
 - [Mobile-first principles](./docs/mobile-first-principles.md)
 - [Application shell and design foundation](./docs/application-shell.md)
+- [Season and goal domain behavior](./docs/season-goal-behavior.md)
 
 # Unresolved Product Questions
 
@@ -262,14 +337,14 @@ Important open questions are maintained in [Initial Product Scope](./docs/initia
 
 # Current Milestone
 
-## Application Shell and Design Foundation
+## Core Season and Goal Domain Behavior
 
-**Current objective:** Establish a production-quality responsive shell, route hierarchy, accessible navigation, semantic design tokens, and reusable presentation primitives using static representative content.
+**Current objective:** Establish explicit, immutable, framework-independent behavior for season, goal, outcome, and milestone lifecycles, activation, progress, summaries, and historical preservation.
 
-**Included work:** `/today`, `/dashboard`, `/season`, `/reflection`, and `/settings`; root redirect; mobile bottom navigation; desktop sidebar; responsive page composition; accessibility foundations; static preview content; and shell documentation.
+**Included work:** Conservative lifecycle contracts; pure transition and validation functions; boolean, numeric, percentage, and count progress; milestone and season summaries; structured domain results/errors; documentation; and focused Node tests.
 
-**Explicitly excluded work:** Real interaction and domain behavior, authentication, persistence, schemas, APIs, server actions, AI, analytics, notifications, accounts, scheduling/task generation, forms, and production/custom domain configuration.
+**Explicitly excluded work:** UI wiring and interaction, authentication, persistence, repositories, schemas, APIs, server actions, AI, notifications, accounts, daily-task behavior, scheduling/task generation, weighted scoring, and production/custom domain configuration.
 
-**Completion criteria:** All routes render successfully; `/` redirects to `/today`; navigation adapts between phone and desktop; active routes and focus states are accessible; representative layouts avoid horizontal overflow; lint, type checking, and production build pass; and no real behavior or dependency is introduced.
+**Completion criteria:** Lifecycle and activation rules are explicit; transitions are immutable; progress and summary rules preserve uncertainty; focused behavior tests pass; lint, type checking, and production build pass; domain files remain framework-independent; and the static shell remains unwired.
 
-**Next decision point:** Define core season and goal behavior independently of persistence and presentation, while preserving unresolved daily-task modeling questions.
+**Next decision point:** Select and introduce an initial persistence boundary for the proven season and goal model without coupling domain behavior to storage.

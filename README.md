@@ -4,7 +4,7 @@ Keep-up is a long-term personal operating system for goals, habits, health, proj
 
 ## Status
 
-The project is in **Application Shell and Design Foundation**. It contains a responsive static application shell, representative product surfaces, product/domain documentation, and lightweight TypeScript contracts. Real product behavior has not been implemented.
+The project is in **Core Season and Goal Domain Behavior**. It contains a responsive static application shell plus framework-independent, tested lifecycle and progress behavior. The domain logic is not wired into the UI and no data is persisted.
 
 Keep-up is intended to be mobile-first. A fast daily execution experience for priorities, due work, completion, and lightweight check-ins is a central product capability alongside deeper planning and reflection. The final production URL and custom domain have not been selected.
 
@@ -41,6 +41,7 @@ The development server is available at [http://localhost:3000](http://localhost:
 ```bash
 npm run lint
 npm run typecheck
+npm test
 ```
 
 ## Application structure
@@ -54,6 +55,10 @@ The root route redirects to `/today`. Current static product routes are:
 - `/settings` — unavailable future settings categories
 
 All displayed tasks, scores, check-ins, reflections, and progress values are illustrative placeholders. Controls do not save or mutate data.
+
+## Domain behavior
+
+Pure season, goal, milestone, outcome-progress, activation, and summary behavior lives in [`src/domain/behavior`](./src/domain/behavior). It has no React or Next.js imports and returns immutable values with structured domain errors. The static routes do not consume this behavior yet, and persistence remains absent.
 
 ## Production build
 
@@ -78,5 +83,6 @@ Documentation is part of the implementation. Update relevant documentation along
 - [Domain invariants](./docs/domain-invariants.md) — accepted, proposed, and unresolved rules
 - [Mobile-first principles](./docs/mobile-first-principles.md) — guidance for the future daily experience
 - [Application shell](./docs/application-shell.md) — routes, responsive navigation, design tokens, accessibility, and placeholder policy
+- [Season and goal behavior](./docs/season-goal-behavior.md) — lifecycle, activation, progress, summary, and preservation rules
 
 Any future change to architecture, scope, roadmap, conventions, or a major decision must update the relevant documentation and `PROJECT_PLAN.md` in the same change.

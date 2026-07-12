@@ -14,4 +14,7 @@ export interface Season {
   intent?: SeasonIntent;
   createdAt: Timestamp;
   updatedAt: Timestamp;
+  activatedAt?: Timestamp;
+  completedAt?: Timestamp;
+  archivedAt?: Timestamp;
 }

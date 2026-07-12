@@ -8,8 +8,8 @@ These boundaries divide responsibility and vocabulary, not necessarily code pack
 - **Owns:** Season, Season Intent, Goal, Outcome, Milestone, and Goal Template definitions.
 - **May reference:** execution summaries and prior carry-forward insights when planning.
 - **Must not own:** task completion history, reflections, authentication, analytics, or coaching output.
-- **Status:** core initial domain; templates are later.
-- **Integration boundary:** publishes stable planning identifiers and definitions for Execution and Reflection without knowing their presentation or persistence.
+- **Status:** core lifecycle, activation, progress, and summary behavior is implemented as pure TypeScript; templates are later.
+- **Integration boundary:** publishes stable planning identifiers, explicit immutable transitions, validation results, and unweighted summaries without knowing presentation or persistence.
 
 ## Execution
 
