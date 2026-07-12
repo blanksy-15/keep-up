@@ -10,6 +10,7 @@ Keep-up is a personal operating system for intentional growth, execution, reflec
 - Favor clarity over excessive complexity.
 - Build for the primary user first while preserving a path toward broader use.
 - Treat historical outcomes as useful context for future planning.
+- Make daily execution fast and clear on a phone without forcing the full planning system into the daily workflow.
 
 # Architecture Principles
 
@@ -22,6 +23,7 @@ Keep-up is a personal operating system for intentional growth, execution, reflec
 - Validate data at system boundaries once those boundaries are introduced.
 - Keep the application buildable after each milestone.
 - Avoid speculative abstractions unsupported by real requirements.
+- Keep core domain contracts independent from Next.js, React, routes, and infrastructure.
 
 # Technology Stack
 
@@ -46,8 +48,10 @@ Current structure:
 
 ```text
 keep-up/
+├── docs/               # Product vocabulary, boundaries, workflows, scope, and principles
 ├── src/
-│   └── app/            # App Router routes, layouts, metadata, and global styles
+│   ├── app/            # App Router routes, layouts, metadata, and global styles
+│   └── domain/         # Framework-independent domain contracts
 ├── PROJECT_PLAN.md     # Living architecture and roadmap
 └── configuration files
 ```
@@ -55,6 +59,8 @@ keep-up/
 The initial structure deliberately retains only directories with immediate value. As product requirements emerge, use these conventions:
 
 - `src/app`: routing and route composition; route files should remain thin.
+- `docs`: product and domain definitions that govern later implementation decisions.
+- `src/domain`: framework-independent types for stable core concepts; no UI, persistence, or runtime services.
 - `public`: static assets once the application has assets to serve.
 - `src/components`: reusable, domain-agnostic UI when shared components actually exist.
 - `src/features/<domain>`: domain-oriented modules containing a capability's business concepts and application logic.
@@ -65,9 +71,9 @@ The initial structure deliberately retains only directories with immediate value
 
 Future business capabilities should be organized by domain or feature rather than accumulated in unrelated global folders. Planned directories should be created only when they have a concrete implementation to contain.
 
-# Long-Term Product Vision
+# Product Capability Map
 
-The following concepts are future roadmap possibilities only. Their inclusion here does **not** authorize implementation:
+The following capabilities span the initial scope and later roadmap. Their inclusion here does **not** authorize implementation beyond the current milestone; [Initial Product Scope](./docs/initial-product-scope.md) is authoritative about what is initial, postponed, or undecided:
 
 - Seasons and seasonal goal planning
 - End-of-season capture and reflection
@@ -87,10 +93,17 @@ The following concepts are future roadmap possibilities only. Their inclusion he
 - Optional shared goals or accountability
 - API- or chatbot-assisted goal setup
 
+Two connected usage modes guide the product:
+
+- **Planning and reflection:** define seasons and goals, establish outcomes, review progress, reflect weekly, close seasons, and carry lessons forward.
+- **Daily execution:** use a fast, mobile-first surface to understand today's priorities, act on tasks and recurring work, and record a lightweight check-in.
+
+The future Today View, or equivalent daily execution surface, is a primary application experience. It must be optimized for phone use while remaining accessible and responsive. Its final name, route, navigation position, and landing-page role remain undecided.
+
 # Initial Roadmap
 
-1. **Project initialization** — establish the buildable framework, repository, and living documentation.
-2. **Product and domain definition** — clarify vocabulary, user needs, boundaries, and initial workflows.
+1. **Project initialization** — completed; established the buildable framework, repository, and living documentation.
+2. **Product and domain definition** — current; clarify vocabulary, user needs, boundaries, and initial workflows.
 3. **Application shell and design foundation** — establish navigation, layout, accessibility, and visual conventions.
 4. **Core season and goal domain modeling** — define behavior and rules independently of persistence and presentation.
 5. **Initial persistence layer** — select and introduce storage behind explicit data-access boundaries.
@@ -108,28 +121,89 @@ Milestone ordering may change as requirements become clearer. Detailed implement
 
 # Decision Log
 
-Use the following format for substantive decisions. No substantive decisions are recorded yet.
+## 2026-07-11 — Define the domain before application features
 
-## YYYY-MM-DD — Decision title
+**Status:** Accepted
 
-**Status:** Proposed | Accepted | Superseded
+**Context:** Shared language and boundaries are needed before UI, persistence, or business behavior can be designed responsibly.
 
-**Context:**
+**Decision:** Establish formal domain documentation and conservative contracts before implementing product features.
 
-**Decision:**
+**Consequences:** Later work must use the glossary, boundaries, workflows, scope, and invariants as its starting point and update them when decisions change.
 
-**Consequences:**
+## 2026-07-11 — Make mobile-first daily execution a core capability
+
+**Status:** Accepted
+
+**Context:** The primary user needs to act and check in quickly from a phone.
+
+**Decision:** Treat fast mobile-first daily execution as central to the initial product, not a later adaptation.
+
+**Consequences:** The future daily surface prioritizes immediate clarity, touch-friendly actions, and brief visits over dense analysis.
+
+## 2026-07-11 — Connect distinct planning/reflection and daily-execution workflows
+
+**Status:** Accepted
+
+**Context:** Deep planning and reflection have different interaction needs from everyday action.
+
+**Decision:** Treat planning/reflection and daily execution as distinct but connected usage modes.
+
+**Consequences:** Planning supplies context to execution; dated execution records feed weekly and seasonal reflection without either workflow duplicating ownership.
+
+## 2026-07-11 — Separate conceptual domain responsibilities
+
+**Status:** Accepted
+
+**Context:** Planning, action, interpretation, assistance, identity, and reporting have different sources of truth.
+
+**Decision:** Separate Planning, Execution, Reflection, Coaching, Identity and Access, and Insights conceptually; allow Health to begin with shared primitives while preserving a specialization seam.
+
+**Consequences:** Domains may reference one another through explicit boundaries but must not duplicate or silently mutate another domain's records.
+
+## 2026-07-11 — Keep core domain types framework-independent
+
+**Status:** Accepted
+
+**Context:** Product language should not be controlled by presentation or infrastructure choices.
+
+**Decision:** Keep core domain TypeScript contracts independent from Next.js, React, routes, persistence, and providers.
+
+**Consequences:** `src/domain` contains definitions only; runtime behavior and integration abstractions wait for evidence and later milestones.
+
+## 2026-07-11 — Postpone infrastructure and external configuration
+
+**Status:** Accepted
+
+**Context:** Authentication, persistence, AI, and deployment-domain choices require later requirements and should not distort the first model.
+
+**Decision:** Postpone authentication, persistence, AI integration, production domain selection, and custom domain configuration.
+
+**Consequences:** Initial contracts contain no user IDs, storage assumptions, provider code, or production URL configuration.
+
+# Product and Domain Documents
+
+- [Domain glossary](./docs/domain-glossary.md)
+- [Domain boundaries](./docs/domain-boundaries.md)
+- [Primary-user workflows](./docs/primary-user-workflows.md)
+- [Initial product scope](./docs/initial-product-scope.md)
+- [Domain invariants](./docs/domain-invariants.md)
+- [Mobile-first principles](./docs/mobile-first-principles.md)
+
+# Unresolved Product Questions
+
+Important open questions are maintained in [Initial Product Scope](./docs/initial-product-scope.md). The highest-impact questions concern season length and goal limits; stored versus generated daily tasks and stable occurrence identities; habit versus recurring-action and project versus goal models; rollover and deferral history; check-in contents and editing; reflection version history; score calculation; and the Today View's name, route, navigation, and landing-page role. Final production domain and URL structure are postponed.
 
 # Current Milestone
 
-## Project Initialization
+## Product and Domain Definition
 
-**Current objective:** Establish a clean, production-quality, buildable Next.js foundation and the documentation needed to guide later work.
+**Current objective:** Establish shared terminology, domain boundaries, primary-user workflows, initial scope, stable proposed invariants, and lightweight framework-independent contracts before building features.
 
-**Included work:** Next.js initialization, TypeScript, Tailwind CSS, ESLint, App Router, `src` organization, npm scripts, Git ignore rules, a neutral landing page, and repository documentation.
+**Included work:** Product and domain documentation, season and daily-execution workflows, mobile-first principles, conservative TypeScript contracts, and updates to living project guidance.
 
-**Explicitly excluded work:** Authentication, persistence, ORM configuration, API endpoints, AI, application features, domain behavior, dashboards, analytics, notifications, accounts, and placeholder business logic.
+**Explicitly excluded work:** UI and routes, runtime domain behavior, authentication, persistence, schemas, APIs, AI, analytics, notifications, accounts, scheduling/task generation, and production/custom domain configuration.
 
-**Completion criteria:** Dependencies install successfully; lint, type checking, and production build pass; the development server starts; the repository root and ignore rules are verified; documentation accurately describes the initialized architecture; and no application features are present.
+**Completion criteria:** Required documents and contracts agree; uncertainty is preserved rather than encoded as behavior; lint, type checking, and production build pass; and no application feature or dependency is introduced.
 
-**Next decision point:** Define the product vocabulary and domain boundaries for the first user workflow before selecting infrastructure or building the application shell.
+**Next decision point:** Use the approved product model to define the application shell and design foundation without prematurely implementing unresolved domain behavior.

@@ -4,7 +4,9 @@ Keep-up is a long-term personal operating system for goals, habits, health, proj
 
 ## Status
 
-The project is in **Project Initialization**. This repository currently contains the application framework and architectural documentation only; product features have not been implemented.
+The project is in **Product and Domain Definition**. It contains the application framework, product/domain documentation, and lightweight TypeScript contracts; product features have not been implemented.
+
+Keep-up is intended to be mobile-first. A fast daily execution experience for priorities, due work, completion, and lightweight check-ins is a central product capability alongside deeper planning and reflection. The final production URL and custom domain have not been selected.
 
 ## Technology stack
 
@@ -52,8 +54,16 @@ npm start
 
 Favor clarity, maintainability, and sustainable progress. Keep framework conventions unless a documented requirement justifies departing from them. Introduce abstractions and dependencies only when real product needs support them, keep business rules outside presentation components, and leave the application buildable after every milestone.
 
-## Documentation expectations
+## Documentation
 
 Documentation is part of the implementation. Update relevant documentation alongside code whenever behavior, setup, conventions, or architecture changes. Commands in this README should remain executable and accurate.
 
-[`PROJECT_PLAN.md`](./PROJECT_PLAN.md) is the living source for the product vision, architecture principles, roadmap, current milestone, and major decisions. Any future change to architecture, scope, roadmap, conventions, or a major decision must update it in the same change.
+- [`PROJECT_PLAN.md`](./PROJECT_PLAN.md) — living vision, architecture principles, roadmap, milestone, and decisions
+- [Domain glossary](./docs/domain-glossary.md) — shared product vocabulary
+- [Domain boundaries](./docs/domain-boundaries.md) — ownership and integration boundaries
+- [Primary-user workflows](./docs/primary-user-workflows.md) — season lifecycle and daily mobile execution
+- [Initial product scope](./docs/initial-product-scope.md) — included, postponed, and undecided work
+- [Domain invariants](./docs/domain-invariants.md) — accepted, proposed, and unresolved rules
+- [Mobile-first principles](./docs/mobile-first-principles.md) — guidance for the future daily experience
+
+Any future change to architecture, scope, roadmap, conventions, or a major decision must update the relevant documentation and `PROJECT_PLAN.md` in the same change.
