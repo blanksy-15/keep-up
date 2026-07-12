@@ -54,10 +54,15 @@ keep-up/
 │   ├── components/
 │   │   ├── app-shell/  # Responsive shell, navigation, and page headers
 │   │   └── ui/         # Small reusable presentation primitives
-│   └── domain/
+│   ├── domain/
 │       ├── behavior/   # Pure lifecycle, validation, progress, and summary functions
 │       └── *.ts        # Framework-independent domain contracts
-├── tests/              # Focused domain behavior tests using Node's test runner
+│   └── persistence/
+│       ├── contracts/  # Explicit planning repository interfaces and repository grouping
+│       ├── mapping/    # Pure domain/record conversion and reconstruction validation
+│       ├── memory/     # Isolated deterministic in-memory implementations
+│       └── records/    # Serializable storage-oriented records
+├── tests/              # Domain behavior and persistence contract tests using Node's test runner
 ├── PROJECT_PLAN.md     # Living architecture and roadmap
 └── configuration files
 ```
@@ -68,6 +73,7 @@ The initial structure deliberately retains only directories with immediate value
 - `docs`: product and domain definitions that govern later implementation decisions.
 - `src/domain`: framework-independent types for stable core concepts; no UI or persistence concerns.
 - `src/domain/behavior`: pure immutable lifecycle, validation, progress, and summary behavior with structured results.
+- `src/persistence`: vendor-neutral repository contracts, records, pure mappers, errors, and replaceable implementations; it may depend on domain contracts, never the reverse.
 - `src/components/app-shell`: responsive application framing and navigation shared by product routes.
 - `src/components/ui`: modest, immediately used visual primitives rather than a general component library.
 - `public`: static assets once the application has assets to serve.
@@ -114,8 +120,8 @@ The future Today View, or equivalent daily execution surface, is a primary appli
 1. **Project initialization** — completed; established the buildable framework, repository, and living documentation.
 2. **Product and domain definition** — completed; clarified vocabulary, user needs, boundaries, and initial workflows.
 3. **Application shell and design foundation** — completed; established navigation, layout, accessibility, and visual conventions.
-4. **Core season and goal domain modeling** — current; define behavior and rules independently of persistence and presentation.
-5. **Initial persistence layer** — select and introduce storage behind explicit data-access boundaries.
+4. **Core season and goal domain modeling** — completed; defined behavior and rules independently of persistence and presentation.
+5. **Initial persistence layer** — current; introduce vendor-neutral storage boundaries and validate them in memory without selecting production storage.
 6. **Personal dashboard** — compose the primary user's essential views and actions.
 7. **Weekly scorecards and reflection** — support review, learning, and planning cycles.
 8. **Habit and health tracking** — add focused tracking capabilities based on validated needs.
@@ -320,6 +326,66 @@ Milestone ordering may change as requirements become clearer. Detailed implement
 
 **Consequences:** The project gains deterministic domain tests without adding a dependency; browser and UI tests remain outside this milestone.
 
+## 2026-07-11 — Introduce explicit planning repository interfaces
+
+**Status:** Accepted
+
+**Context:** Storage must be replaceable without moving persistence concerns into domain objects or exposing vendor query syntax.
+
+**Decision:** Define separate repositories for seasons, goals, outcomes, and milestones. Repositories return domain objects through structured persistence results; normal lookup misses return `null`.
+
+**Consequences:** Application orchestration can depend on narrow contracts while domain behavior remains unaware of persistence.
+
+## 2026-07-11 — Separate persistence records with pure validating mappers
+
+**Status:** Accepted
+
+**Context:** Stored representations need explicit nullable primitives and reconstruction safety without becoming domain rules.
+
+**Decision:** Store each identified planning concept in its own primitive record and use pure mappers to preserve parent IDs, dates, statuses, timestamps, and raw progress. Malformed records return vendor-neutral `invalid_record` errors.
+
+**Consequences:** Records can evolve behind the boundary, mapping does not repair or transition data, and no domain-contract refinement was required.
+
+## 2026-07-11 — Validate repository contracts in memory
+
+**Status:** Accepted
+
+**Context:** Persistence semantics should be proven before selecting production technology.
+
+**Decision:** Provide isolated in-memory repositories with create-or-replace save semantics, deterministic ordering, and record mapping on every read/write for reference isolation.
+
+**Consequences:** Duplicate IDs replace complete records, no state is global, and the implementation provides no production durability.
+
+## 2026-07-11 — Omit repository deletion initially
+
+**Status:** Accepted
+
+**Context:** Product deletion policy is unresolved and historical preservation is already accepted.
+
+**Decision:** Omit delete operations until application policy defines legitimate physical-deletion cases.
+
+**Consequences:** Lifecycle transitions remain the normal record-retention mechanism; draft cleanup and administrative deletion remain future decisions.
+
+## 2026-07-11 — Group repositories without claiming transactions
+
+**Status:** Accepted
+
+**Context:** Future orchestration benefits from receiving one planning persistence dependency, but transaction semantics cannot be designed honestly against isolated maps.
+
+**Decision:** Add `PlanningUnitOfWork` as a repository grouping only, with no commit, rollback, or transaction API.
+
+**Consequences:** Dependency injection is simpler while real atomic behavior waits for a transaction-capable implementation and proven use cases.
+
+## 2026-07-11 — Postpone aggregate loading and production storage selection
+
+**Status:** Accepted
+
+**Context:** No application service consumes persisted planning data yet, so aggregate query shape and storage technology lack evidence.
+
+**Decision:** Postpone season aggregate loading, databases, ORMs, migrations, and vendor constraints. Individual repositories preserve parent IDs but do not fake cross-repository referential integrity.
+
+**Consequences:** Future application orchestration will define focused aggregate queries and parent checks; later database constraints will enforce storage integrity.
+
 # Product and Domain Documents
 
 - [Domain glossary](./docs/domain-glossary.md)
@@ -330,6 +396,7 @@ Milestone ordering may change as requirements become clearer. Detailed implement
 - [Mobile-first principles](./docs/mobile-first-principles.md)
 - [Application shell and design foundation](./docs/application-shell.md)
 - [Season and goal domain behavior](./docs/season-goal-behavior.md)
+- [Initial persistence boundary](./docs/persistence-boundary.md)
 
 # Unresolved Product Questions
 
@@ -337,14 +404,14 @@ Important open questions are maintained in [Initial Product Scope](./docs/initia
 
 # Current Milestone
 
-## Core Season and Goal Domain Behavior
+## Initial Persistence Boundary
 
-**Current objective:** Establish explicit, immutable, framework-independent behavior for season, goal, outcome, and milestone lifecycles, activation, progress, summaries, and historical preservation.
+**Current objective:** Establish vendor-neutral repositories, serializable records, validating mappers, deterministic in-memory implementations, and tested persistence semantics without choosing production storage.
 
-**Included work:** Conservative lifecycle contracts; pure transition and validation functions; boolean, numeric, percentage, and count progress; milestone and season summaries; structured domain results/errors; documentation; and focused Node tests.
+**Included work:** Explicit season, goal, outcome, and milestone repositories; primitive records; pure round-trip mappers; structured persistence errors; create-or-replace in-memory storage; deterministic listing; reference isolation; repository grouping; documentation; and contract tests.
 
-**Explicitly excluded work:** UI wiring and interaction, authentication, persistence, repositories, schemas, APIs, server actions, AI, notifications, accounts, daily-task behavior, scheduling/task generation, weighted scoring, and production/custom domain configuration.
+**Explicitly excluded work:** Production database/ORM selection, migrations, environment variables, transactions, aggregate loading, delete policy, UI wiring, application services, authentication, APIs, server actions, daily-task/reflection persistence, caching, and production/custom domain configuration.
 
-**Completion criteria:** Lifecycle and activation rules are explicit; transitions are immutable; progress and summary rules preserve uncertainty; focused behavior tests pass; lint, type checking, and production build pass; domain files remain framework-independent; and the static shell remains unwired.
+**Completion criteria:** Repository and mapping contracts preserve all supported fields; malformed records fail explicitly; in-memory implementations are deterministic and reference-isolated; existing and persistence tests pass; dependency direction is audited; lint/typecheck/build pass; and no vendor or UI integration is introduced.
 
-**Next decision point:** Select and introduce an initial persistence boundary for the proven season and goal model without coupling domain behavior to storage.
+**Next decision point:** Define the application-service boundary that coordinates domain behavior and repositories without coupling routes directly to persistence.

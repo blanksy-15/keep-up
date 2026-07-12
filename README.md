@@ -4,7 +4,7 @@ Keep-up is a long-term personal operating system for goals, habits, health, proj
 
 ## Status
 
-The project is in **Core Season and Goal Domain Behavior**. It contains a responsive static application shell plus framework-independent, tested lifecycle and progress behavior. The domain logic is not wired into the UI and no data is persisted.
+The project is in **Initial Persistence Boundary**. It contains a responsive static shell, framework-independent domain behavior, and tested vendor-neutral repository contracts with an in-memory implementation. No production database exists and the UI is not connected to persistence.
 
 Keep-up is intended to be mobile-first. A fast daily execution experience for priorities, due work, completion, and lightweight check-ins is a central product capability alongside deeper planning and reflection. The final production URL and custom domain have not been selected.
 
@@ -58,7 +58,11 @@ All displayed tasks, scores, check-ins, reflections, and progress values are ill
 
 ## Domain behavior
 
-Pure season, goal, milestone, outcome-progress, activation, and summary behavior lives in [`src/domain/behavior`](./src/domain/behavior). It has no React or Next.js imports and returns immutable values with structured domain errors. The static routes do not consume this behavior yet, and persistence remains absent.
+Pure season, goal, milestone, outcome-progress, activation, and summary behavior lives in [`src/domain/behavior`](./src/domain/behavior). It has no React, Next.js, or persistence imports and returns immutable values with structured domain errors. The static routes do not consume this behavior yet.
+
+## Persistence boundary
+
+Repository contracts, serializable records, pure mappers, and isolated in-memory repositories live in [`src/persistence`](./src/persistence). The in-memory implementation exists to validate the boundary and is not production storage. Domain behavior does not import persistence, and no database or ORM has been selected.
 
 ## Production build
 
@@ -84,5 +88,6 @@ Documentation is part of the implementation. Update relevant documentation along
 - [Mobile-first principles](./docs/mobile-first-principles.md) — guidance for the future daily experience
 - [Application shell](./docs/application-shell.md) — routes, responsive navigation, design tokens, accessibility, and placeholder policy
 - [Season and goal behavior](./docs/season-goal-behavior.md) — lifecycle, activation, progress, summary, and preservation rules
+- [Persistence boundary](./docs/persistence-boundary.md) — repositories, records, mapping, in-memory semantics, and postponed storage choices
 
 Any future change to architecture, scope, roadmap, conventions, or a major decision must update the relevant documentation and `PROJECT_PLAN.md` in the same change.

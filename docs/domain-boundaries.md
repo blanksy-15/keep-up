@@ -79,3 +79,7 @@ Daily check-ins are created through the Execution experience because they are pa
 - Insights stores or computes derived views without becoming an alternative history.
 - Coaching suggests and explains through explicit interfaces; accepted changes flow through the owning domain.
 - Identity and Access governs who may act on a record, while the record remains owned by its business domain.
+
+## Persistence infrastructure boundary
+
+Persistence is infrastructure, not a user-facing product domain. It stores and reconstructs domain state through explicit repository interfaces and must not define lifecycle rules, calculate progress, or silently change user-owned records. Future application services will coordinate domain behavior with repository operations; future identity and authorization checks will sit above or around persistence. Vendor-specific database code, migrations, and error translation must remain behind repository implementations. See [Initial Persistence Boundary](./persistence-boundary.md).

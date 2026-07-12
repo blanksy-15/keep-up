@@ -37,6 +37,11 @@ Labels mean:
 - **Proposed:** Weekly reflections must not silently overwrite prior historical content; the exact edit/version mechanism is undecided.
 - **Proposed:** Progress updates preserve enough history to support later reflection and analytics; the required granularity is undecided.
 - **Accepted:** An active season has a start date no later than its end date.
+- **Accepted:** Persistence must not silently change lifecycle status or calculate domain progress.
+- **Accepted:** Stored and reconstructed goals, outcomes, and milestones preserve their parent identifiers.
+- **Accepted:** A normal repository miss is distinct from a storage failure.
+- **Accepted:** Repository implementations do not expose mutable internal references.
+- **Accepted:** Domain contracts and behavior remain independent from persistence implementations.
 - **Proposed:** Completion records should retain a link to the originating source when one exists, even if the source is later archived.
 - **Proposed:** Season Review becomes the authoritative user-authored closing interpretation while remaining editable only under an explicit future policy.
 
