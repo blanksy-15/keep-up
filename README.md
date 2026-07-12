@@ -1,36 +1,59 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# keep-up
 
-## Getting Started
+Keep-up is a long-term personal operating system for goals, habits, health, projects, and personal growth. It is intended to support intentional growth, consistent execution, reflection, and durable progress without becoming burdensome.
 
-First, run the development server:
+## Status
+
+The project is in **Project Initialization**. This repository currently contains the application framework and architectural documentation only; product features have not been implemented.
+
+## Technology stack
+
+- Next.js 16 with the App Router
+- React 19
+- TypeScript in strict mode
+- Tailwind CSS 4
+- ESLint 9 with the Next.js configuration
+- npm and Git
+- Vercel-compatible, mobile-first application structure
+
+## Prerequisites
+
+- Node.js 20.9 or newer
+- npm (included with Node.js)
+- Git
+
+## Installation
+
+```bash
+npm install
+```
+
+## Local development
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The development server is available at [http://localhost:3000](http://localhost:3000). Other useful checks are:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run lint
+npm run typecheck
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Production build
 
-## Learn More
+```bash
+npm run build
+npm start
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Development philosophy
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Favor clarity, maintainability, and sustainable progress. Keep framework conventions unless a documented requirement justifies departing from them. Introduce abstractions and dependencies only when real product needs support them, keep business rules outside presentation components, and leave the application buildable after every milestone.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Documentation expectations
 
-## Deploy on Vercel
+Documentation is part of the implementation. Update relevant documentation alongside code whenever behavior, setup, conventions, or architecture changes. Commands in this README should remain executable and accurate.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+[`PROJECT_PLAN.md`](./PROJECT_PLAN.md) is the living source for the product vision, architecture principles, roadmap, current milestone, and major decisions. Any future change to architecture, scope, roadmap, conventions, or a major decision must update it in the same change.
