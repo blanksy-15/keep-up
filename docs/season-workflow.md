@@ -2,6 +2,8 @@
 
 Confirmed setup drafts can now be converted in one database transaction. Conversion allocates authoritative IDs distinct from proposal IDs, creates only draft seasons/goals plus outcomes and supported milestones, returns proposal-ID mappings, reports unsupported structures, and marks the draft converted with its target season only after every write succeeds. It never activates records or calls an assistant. Repeated conversion is rejected; row locking protects the confirmed-to-converted transition.
 
+Real PostgreSQL tests require two competing conversion connections. The winner commits the sole authoritative graph; after the row lock releases, the loser re-reads `converted` and returns a conflict. Injected failures verify rollback leaves the draft confirmed and retryable.
+
 Season setup is a guided draft, not an authoritative `Season`. It may collect free-form priorities, proposed goals and outcomes, structures, constraints, questions, and approved earlier insights. Goals are user-owned and deliberately have no required category or taxonomy.
 
 The setup lifecycle is `draft -> ready_for_review -> confirmed`. Editing returns review-ready work to `draft`; confirmed drafts are immutable. Readiness separates structural blockers from conservative, non-blocking warnings. Confirmation permits a deterministic conversion plan but does not create or activate a season.

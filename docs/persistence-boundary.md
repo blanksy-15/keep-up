@@ -2,6 +2,8 @@
 
 PostgreSQL with Drizzle is the first durable adapter; in-memory repositories remain supported. Migration files own schema change. Application services see repository and transaction-runner contracts, never Drizzle. Database constraints protect structural relationships while domain behavior owns lifecycle rules. PostgreSQL errors map to stable persistence errors, routes do not access the database, and deletion remains omitted.
 
+Real PostgreSQL CI is required for locking claims. PGlite remains the fast compatibility layer, while PostgreSQL 16 tests migration behavior, driver translation, transaction rollback, and separate-connection contention.
+
 Setup drafts and reviews have dedicated repository contracts and in-memory adapters. Nested values contain serializable domain primitives. In-memory adapters deep-clone reads and writes and sort lists deterministically.
 
 This boundary stores and reconstructs planning-domain state without choosing a database, ORM, hosting provider, transport, or deployment model. The in-memory implementation validates the contracts and is not production persistence.

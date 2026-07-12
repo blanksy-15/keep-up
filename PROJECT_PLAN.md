@@ -2,11 +2,13 @@
 
 ## Current milestone (2026-07-11)
 
-**PostgreSQL Persistence and Transactional Setup Conversion** — durable schema, migration, repositories, transaction boundary, authoritative ID allocation, and atomic confirmed-setup conversion. Season Setup and Review Workflows is complete.
+**Real PostgreSQL Continuous Integration** — GitHub Actions, disposable PostgreSQL 16, real migration/repository/rollback tests, and independent-connection conversion contention. PostgreSQL Persistence and Transactional Setup Conversion is complete.
 
 New organization includes `src/application/season-workflow`, `src/application/assistant`, `docs/season-workflow.md`, `docs/assistant-boundaries.md`, and `docs/season-summary-standard.md`.
 
 Database organization includes `src/config`, `src/database/schema`, `src/persistence/postgres`, `drizzle`, and `docs/postgresql-persistence.md`.
+
+CI organization includes `.github/workflows/ci.yml`, `.nvmrc`, real-server tests, and `docs/continuous-integration.md`.
 
 ### Decisions
 
@@ -27,6 +29,13 @@ Database organization includes `src/config`, `src/database/schema`, `src/persist
 - Evolving workflow bodies use validated JSONB while stable planning relationships remain relational.
 - In-memory repositories remain; PGlite provides isolated PostgreSQL-compatible migration/transaction tests.
 - UI integration, authentication/ownership, AI providers, chatbot transport, hosted provisioning, and daily execution remain postponed.
+- GitHub Actions runs on `main` pushes and pull requests with read-only contents permission and no deployment.
+- CI uses Node 20 and disposable PostgreSQL 16 with ephemeral test credentials.
+- Fast/PGlite tests and guarded real-PostgreSQL tests are separate commands.
+- Committed migrations are applied to an empty server database and recognized on a second invocation.
+- Independent pools are mandatory for exactly-one-success concurrency verification.
+- Failure injection covers season, goal, outcome, milestone, and final workflow writes.
+- Known-table truncation isolates real-server scenarios; Docker Compose remains omitted and optional local PostgreSQL is documented.
 
 Keep-up is a personal operating system for intentional growth, execution, reflection, and long-term progress. It will bring goals, habits, health, projects, and personal growth into one coherent system that helps a person decide what matters, act consistently, learn from outcomes, and carry useful context forward.
 

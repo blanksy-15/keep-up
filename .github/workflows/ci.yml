@@ -1,0 +1,62 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: keep_up_test
+          POSTGRES_PASSWORD: keep_up_test
+          POSTGRES_DB: keep_up_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U keep_up_test -d keep_up_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      DATABASE_URL: postgresql://keep_up_test:keep_up_test@127.0.0.1:5432/keep_up_test
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Verify PostgreSQL connectivity
+        run: node -e "const {Client}=require('pg');const c=new Client({connectionString:process.env.DATABASE_URL});c.connect().then(()=>c.end()).catch(e=>{console.error('PostgreSQL connection failed.');process.exit(1)})"
+      - name: Apply committed migrations
+        run: npm run db:migrate
+      - name: Check Drizzle schema history
+        run: npm run db:check
+      - name: Run fast and PGlite tests
+        run: npm test
+      - name: Run real PostgreSQL repository, rollback, and concurrency tests
+        run: npm run test:postgres
+      - name: Lint
+        run: npm run lint
+      - name: Type check
+        run: npm run typecheck
+      - name: Production build
+        run: npm run build

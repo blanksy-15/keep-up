@@ -8,6 +8,10 @@ Run `npm.cmd test` for the full suite. There is no real assistant provider, chat
 
 The durable adapter uses PostgreSQL, Drizzle, and the standard `pg` driver. Copy the placeholder shape from `.env.example` and provide `DATABASE_URL` only when explicitly composing database infrastructure. Use `npm.cmd run db:generate`, `npm.cmd run db:check`, and `npm.cmd run db:migrate`; `npm.cmd run test:db` uses an isolated PGlite engine. Confirmed setup conversion atomically creates draft planning records without activation. No hosted provider, credentials, UI connection, authentication, or multi-user ownership is included.
 
+## Continuous integration
+
+`.github/workflows/ci.yml` runs on `main` pushes and pull requests. It installs with `npm ci`, applies migrations to disposable PostgreSQL 16, runs `npm test` and `npm run test:postgres`, then lint, type checking, and the production build. Local real-server tests require a running PostgreSQL test database and a guarded `DATABASE_URL`; CI performs no deployment.
+
 Keep-up is a long-term personal operating system for goals, habits, health, projects, and personal growth. It is intended to support intentional growth, consistent execution, reflection, and durable progress without becoming burdensome.
 
 ## Status

@@ -20,6 +20,6 @@ The transaction runner supplies transaction-bound planning and workflow reposito
 
 ## Testing and limitations
 
-Automated database tests apply the committed migration to a fresh in-memory PGlite database per test. PGlite is PostgreSQL-compatible and exercises Drizzle queries, constraints, commit, and rollback without accessing personal or production data. It is not a substitute for server PostgreSQL multi-connection concurrency testing; row-locking SQL is exercised, but simultaneous independent-connection conversion remains environment-blocked until a disposable PostgreSQL server is available.
+Fast database tests apply committed migrations to fresh PGlite databases. CI additionally uses PostgreSQL 16 with the standard `pg` driver, applies migrations twice to verify idempotent recognition, and uses independent pools to prove `FOR UPDATE` contention, exactly-one-success conversion, idempotency, and rollback. Known tables are truncated between real-server scenarios. These results cover the tested engine and driver versions; hosting, pooling, backup, monitoring, and operational configuration remain undecided.
 
 No authentication, ownership, row-level security, or multi-user safety exists. The schema is single-user only by omission, not permanent design; trusted multi-user support requires a deliberate ownership migration. Application pages remain disconnected. Conversion creates draft records only. Daily execution, hosted provisioning, deployment, and destructive deletion remain postponed.

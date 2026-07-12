@@ -14,6 +14,9 @@
 - Proposal IDs never become authoritative planning IDs.
 - Rollback preserves the pre-conversion workflow and planning state.
 - Database constraints protect structural relationships; domain and application behavior retain lifecycle authority.
+- For one confirmed setup draft, only one concurrent conversion may succeed.
+- Transaction locking plus an in-transaction status recheck prevents duplicate authoritative graphs.
+- Real PostgreSQL integration tests, not PGlite alone, substantiate row-locking behavior.
 
 Labels mean:
 

@@ -13,7 +13,8 @@
     "db:migrate": "drizzle-kit migrate",
     "db:check": "drizzle-kit check",
     "db:studio": "drizzle-kit studio",
-    "test:db": "tsc --project tsconfig.test.json && node --test .test-dist/tests/postgres-integration.test.js"
+    "test:db": "tsc --project tsconfig.test.json && node --test .test-dist/tests/postgres-integration.test.js",
+    "test:postgres": "tsc --project tsconfig.test.json && node --test .test-dist/tests/postgres-real.test.js"
   },
   "dependencies": {
     "drizzle-orm": "^0.45.2",
