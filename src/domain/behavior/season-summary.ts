@@ -21,7 +21,9 @@ export interface GoalSummaryInput {
 
 export function summarizeGoal(input: GoalSummaryInput): DomainResult<GoalSummary> {
   const progress = input.outcomes.map((outcome) => calculateOutcomeProgress(outcome));
-  const errors = progress.flatMap((result) => (result.ok ? [] : result.errors));
+  const errors = progress.flatMap((result, index) =>
+    result.ok || !input.outcomes[index]?.progress ? [] : result.errors,
+  );
   if (errors.length > 0) return { ok: false, errors };
 
   const values = progress.flatMap((result) => (result.ok ? [result.value] : []));
@@ -31,7 +33,7 @@ export function summarizeGoal(input: GoalSummaryInput): DomainResult<GoalSummary
 
   return success({
     status: input.goal.status,
-    outcomeCount: values.length,
+    outcomeCount: input.outcomes.length,
     completedOutcomeCount: values.filter((value) => value.isComplete).length,
     averageOutcomeProgress,
     milestoneProgress: calculateMilestoneProgress(input.milestones ?? []),

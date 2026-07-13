@@ -80,7 +80,7 @@ test("completes, persists, locks, and converts a guided season setup", async ({ 
   const editedOutcome = page.locator("section.goal-editor").filter({ hasText: "Ship a useful first version this season" }).locator(".outcome-editor").first();
   await editedOutcome.getByLabel("Outcome").fill("Publish the first useful version");
   await editedOutcome.getByRole("button", { name: "Save outcome" }).click();
-  await expect(page.getByText("Publish the first useful version", { exact: true })).toBeVisible();
+  await expect(editedOutcome.locator('input[name="text"]')).toHaveValue("Publish the first useful version");
   const removableOutcome = page.locator("section.goal-editor").filter({ hasText: secondGoal }).locator(".outcome-editor").last();
   await removableOutcome.getByRole("button", { name: "Remove outcome" }).click();
   await addOutcome(page, secondGoal, "count", "Share a replacement update", "5", "updates");

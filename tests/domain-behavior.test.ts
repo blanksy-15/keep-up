@@ -3,6 +3,7 @@ import { describe, test } from "node:test";
 import {
   calculateMilestoneProgress,
   calculateOutcomeProgress,
+  summarizeGoal,
   summarizeSeason,
   transitionGoal,
   transitionMilestone,
@@ -234,6 +235,18 @@ describe("outcome progress", () => {
 
   test("rejects a negative progress value", () => {
     assert.equal(calculateOutcomeProgress(outcome({ progress: { value: -1, recordedAt: createdAt } })).ok, false);
+  });
+});
+
+describe("goal summaries", () => {
+  test("keep unrecorded outcomes visible without inventing progress", () => {
+    const result = summarizeGoal({ goal: goal(), outcomes: [outcome({ progress: undefined })] });
+    assert.equal(result.ok, true);
+    if (result.ok) {
+      assert.equal(result.value.outcomeCount, 1);
+      assert.equal(result.value.averageOutcomeProgress, null);
+      assert.equal(result.value.completedOutcomeCount, 0);
+    }
   });
 });
 

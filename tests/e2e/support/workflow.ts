@@ -9,7 +9,7 @@ export async function startDraft(page: Page, title: string) {
   await page.goto("/season/setup/new");
   await page.getByLabel("Working title").fill(title);
   await page.getByRole("button", { name: "Start setup" }).click();
-  await expect(page).toHaveURL(/\/season\/setup\/[^/]+$/);
+  await expect(page).toHaveURL(/\/season\/setup\/[0-9a-f-]{36}$/i);
   return page.url().split("/").at(-1)!;
 }
 
