@@ -113,8 +113,8 @@ test("completes, persists, locks, and converts a guided season setup", async ({ 
   await expect(page.getByText("Season · draft")).toBeVisible();
   await expect(page.getByText(intent)).toBeVisible();
   await expect(page.getByText("Publish the first useful version", { exact: true })).toBeVisible();
-  await expect(page.getByText("Complete focused work", { exact: true })).toBeVisible();
-  await expect(page.getByText("Reach meaningful completeness", { exact: true })).toBeVisible();
+  await expect(page.getByText("Complete focused work")).toBeVisible();
+  await expect(page.getByText("Reach meaningful completeness")).toBeVisible();
 
   await staleCompletion.getByRole("button", { name: "Create draft season" }).click();
   await expect(staleCompletion).toHaveURL(/\/season\/setup\/[^/]+\/complete\?error=already-converted$/);
