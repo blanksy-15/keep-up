@@ -42,11 +42,15 @@ test("completes, persists, locks, and converts a guided season setup", async ({ 
     await expect(page.getByText(priority, { exact: true })).toBeVisible();
   }
   const firstPriority = page.locator("div.setup-row").filter({ hasText: "Protect deep work" }).first();
+  const selectPriorityResponse = page.waitForResponse(response => response.request().method() === "POST" && response.url().includes("/season/setup/"));
   await firstPriority.locator('input[type="checkbox"]').click();
+  await selectPriorityResponse;
   await page.reload();
   const selectedPriority = page.locator("div.setup-row").filter({ hasText: "Protect deep work" }).first().locator('input[type="checkbox"]');
   await expect(selectedPriority).toBeChecked();
+  const deselectPriorityResponse = page.waitForResponse(response => response.request().method() === "POST" && response.url().includes("/season/setup/"));
   await selectedPriority.click();
+  await deselectPriorityResponse;
   await page.reload();
   const firstPriorityAfterToggle = page.locator("div.setup-row").filter({ hasText: "Protect deep work" }).first();
   await expect(firstPriorityAfterToggle.locator('input[type="checkbox"]')).not.toBeChecked();
