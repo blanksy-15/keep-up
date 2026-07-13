@@ -55,7 +55,7 @@ export default defineConfig({
     },
   },
   projects: [
-    { name: "mobile-chromium", use: { ...devices["iPhone 13"] } },
+    { name: "mobile-chromium", use: { ...devices["Desktop Chrome"], viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true } },
     { name: "desktop-chromium", testMatch: /responsive\.spec\.ts/, use: { ...devices["Desktop Chrome"], viewport: { width: 1440, height: 900 } } },
   ],
 });
