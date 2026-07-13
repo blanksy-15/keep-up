@@ -102,8 +102,10 @@ test("completes, persists, locks, and converts a guided season setup", async ({ 
   await staleCompletion.goto(completionUrl);
   await expect(staleCompletion.getByRole("button", { name: "Create draft season" })).toBeVisible();
 
-  const editResponse = await page.goto(setupUrl);
+  const staleSetup = await context.newPage();
+  const editResponse = await staleSetup.goto(setupUrl);
   expect(editResponse?.status()).toBe(404);
+  await staleSetup.close();
   await page.goto(completionUrl);
   await expect(page.getByRole("heading", { name: "Create your draft season" })).toBeVisible();
   await page.getByRole("button", { name: "Create draft season" }).click();
