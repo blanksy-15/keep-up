@@ -23,11 +23,12 @@ test("denies another account access to setup and resulting season records", asyn
 
   const otherContext = await browser.newContext();
   const otherPage = await otherContext.newPage();
-  const otherErrors = monitorBrowserErrors(otherPage);
+  const otherErrors = monitorBrowserErrors(otherPage, { ignoredConsoleErrors: [/Failed to load resource: the server responded with a status of 404 \(Not Found\)/] });
   const other = syntheticAccount("owner-b");
   await signUp(otherPage, other);
   for (const url of [draftUrl, completionUrl, seasonUrl]) {
-    await otherPage.goto(url);
+    const response = await otherPage.goto(url);
+    expect(response?.status()).toBe(404);
     await expect(otherPage.locator("body")).toContainText("404");
     await expect(otherPage.locator("body")).not.toContainText("Private plan");
     await expect(otherPage.locator("body")).not.toContainText("Private intent");

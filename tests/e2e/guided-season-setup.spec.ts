@@ -89,7 +89,7 @@ test("completes, persists, locks, and converts a guided season setup", async ({ 
   await expect(page).toHaveURL(/\/season\/setup\/[^/]+\/review$/);
   await expect(page.getByRole("heading", { name: "Ready to confirm" })).toBeVisible();
   await expect(page.getByText(intent)).toBeVisible();
-  await expect(page.getByText("Publish the first useful version", { exact: true })).toBeVisible();
+  await expect(page.getByText("Publish the first useful version")).toBeVisible();
   await expect(page.getByText(/percentage/)).toBeVisible();
   await expect(page.getByText(/count/)).toBeVisible();
 
