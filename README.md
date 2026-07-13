@@ -6,17 +6,21 @@ Better Auth provides email/password sign-up, sign-in, sign-out, and database-bac
 
 There is no social login, email verification delivery, password recovery, MFA, organization/family sharing, or production auth configuration yet.
 
-The current milestone is **Guided Season Setup UI**. Authenticated users can start durable setup drafts at `/season/setup`, save foundation details, brainstorm priorities, add unrestricted goals and measurable outcomes, review readiness, confirm explicitly, and convert transactionally into an owner-scoped draft season. AI assistance and activation remain postponed.
+The current milestone is **Authenticated Browser End-to-End Verification**. Playwright exercises guided setup through the browser, Better Auth, session-derived ownership, PostgreSQL repositories, and transactional conversion. AI assistance and activation remain postponed.
 
 Run `npm.cmd test` for the full suite, `npm.cmd run test:db` for PGlite, and `npm.cmd run test:postgres` when a safe PostgreSQL test database exists. Required local variables are listed in `.env.example`: `DATABASE_URL`, `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL`, and `ALLOW_PUBLIC_SIGN_UP`.
 
-## Database
+## PostgreSQL and migrations
 
-The durable adapter uses PostgreSQL, Drizzle, and the standard `pg` driver. Copy the placeholder shape from `.env.example` and provide `DATABASE_URL` only when explicitly composing database infrastructure. Use `npm.cmd run db:generate`, `npm.cmd run db:check`, and `npm.cmd run db:migrate`; `npm.cmd run test:db` uses an isolated PGlite engine. Confirmed setup conversion atomically creates draft planning records without activation. No hosted provider, credentials, UI connection, authentication, or multi-user ownership is included.
+The durable adapter and browser tests use PostgreSQL, Drizzle, and `pg`. `drizzle.config.ts` loads `.env.local` through `@next/env`; `npm.cmd run db:migrate` therefore uses the intended local environment without a manual PowerShell export and fails clearly when `DATABASE_URL` is absent. Use `npm.cmd run db:generate`, `npm.cmd run db:check`, and `npm.cmd run db:migrate`. E2E cleanup requires a separate database with `test` in its name. Browser tests never fall back to PGlite; `npm.cmd run test:db` remains the isolated PGlite layer.
 
 ## Continuous integration
 
-`.github/workflows/ci.yml` runs on `main` pushes and pull requests. It installs with `npm ci`, applies migrations to disposable PostgreSQL 16, runs `npm test` and `npm run test:postgres`, then lint, type checking, and the production build. Local real-server tests require a running PostgreSQL test database and a guarded `DATABASE_URL`; CI performs no deployment.
+`.github/workflows/ci.yml` runs on `main` pushes and pull requests. The verification job runs the lower-level suites, lint, type checking, and build. A separate E2E job uses disposable PostgreSQL 16, installs Chromium, applies migrations, and runs `npm.cmd run test:e2e` with synthetic values. Local browser execution requires a separate safe PostgreSQL E2E database; Docker is not mandatory because CI supplies one.
+
+## Playwright browser verification
+
+Install Chromium with `npx playwright install chromium`, then use `npm.cmd run test:e2e`, `npm.cmd run test:e2e:headed`, `npm.cmd run test:e2e:ui`, or `npm.cmd run test:e2e:report`. Set `DATABASE_URL`, `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL`, `PLAYWRIGHT_BASE_URL`, `ALLOW_PUBLIC_SIGN_UP=true`, and `E2E_TEST_MODE=true`. The database name must contain `test`; do not use the normal development database. Test accounts are synthetic, authentication state is not committed, and `playwright/.auth/`, reports, and failure artifacts are ignored. See [`docs/browser-end-to-end-testing.md`](./docs/browser-end-to-end-testing.md).
 
 Keep-up is a long-term personal operating system for goals, habits, health, projects, and personal growth. It is intended to support intentional growth, consistent execution, reflection, and durable progress without becoming burdensome.
 

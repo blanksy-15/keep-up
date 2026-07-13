@@ -12,7 +12,7 @@ Database constraints protect keys, relationships, date order, and positive outco
 
 ## Configuration and migrations
 
-`src/config/database.ts` reads and validates `DATABASE_URL` only when PostgreSQL composition is requested. Missing configuration does not break builds, tests, or static routes. `.env.example` contains a placeholder only. Use `npm.cmd run db:generate` after intentional schema changes, `npm.cmd run db:check` to validate migration history, and `npm.cmd run db:migrate` only against a deliberately selected database. Migration files, not schema push, own production evolution.
+`src/config/database.ts` reads and validates `DATABASE_URL` only when PostgreSQL composition is requested. `drizzle.config.ts` explicitly loads `.env.local` with `@next/env`, so `npm.cmd run db:migrate` uses the intended local environment and fails clearly instead of using a placeholder URL. Missing configuration does not break builds, tests, or static routes. `.env.example` contains a placeholder only. Use `npm.cmd run db:generate` after intentional schema changes, `npm.cmd run db:check` to validate migration history, and `npm.cmd run db:migrate` only against a deliberately selected database. Migration files, not schema push, own production evolution.
 
 ## Repositories and transactions
 
@@ -25,6 +25,8 @@ The transaction runner supplies transaction-bound planning and workflow reposito
 Fast database tests apply committed migrations to fresh PGlite databases. CI additionally uses PostgreSQL 16 with the standard `pg` driver, applies migrations twice to verify idempotent recognition, and uses independent pools to prove `FOR UPDATE` contention, exactly-one-success conversion, idempotency, and rollback. Known tables are truncated between real-server scenarios. These results cover the tested engine and driver versions; hosting, pooling, backup, monitoring, and operational configuration remain undecided.
 
 No authentication, ownership, row-level security, or multi-user safety exists. The schema is single-user only by omission, not permanent design; trusted multi-user support requires a deliberate ownership migration. Application pages remain disconnected. Conversion creates draft records only. Daily execution, hosted provisioning, deployment, and destructive deletion remain postponed.
+
+Playwright E2E uses a separate PostgreSQL database whose name contains `test`, applies committed migrations, and truncates only known application/auth tables before a run. It never uses the normal development database or falls back to PGlite. CI provides disposable PostgreSQL 16; local execution is intentionally blocked until a safe local database or Neon test branch is supplied.
 # UI-backed persistence
 
 Guided setup reads and writes are request-scoped and durable in PostgreSQL. Conversion remains the existing transactional operation; resulting seasons are draft until a future explicit activation workflow.

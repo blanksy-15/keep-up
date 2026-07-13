@@ -17,6 +17,8 @@ Real tests truncate the six known application tables in dependency-safe order be
 For local testing, run PostgreSQL yourself, create a disposable database whose name contains `test`, set `DATABASE_URL`, and run `npm.cmd run test:postgres`. Docker is optional; no Compose stack is committed because CI already supplies disposable orchestration and Docker is not required locally.
 
 Failures are separated by named migration, fast-test, PostgreSQL, lint, typecheck, and build steps. Logs never print the connection string, password, or tokens. Inspect runs in the repository's Actions tab. Passing PGlite does not replace server testing; passing this PostgreSQL 16 job proves the tested row-lock behavior for this schema/driver/version, not every future hosting configuration. No deployment occurs.
+
+The separate `e2e` job uses Node 20 and disposable PostgreSQL 16 with a database named `keep_up_e2e_test`. It applies migrations, installs Chromium with Playwright system dependencies, starts the Next.js test server on port 3101, and runs the authenticated browser suite with synthetic Better Auth values. It uses one worker and read-only contents permission. HTML reports, traces, and screenshots are uploaded only on failure or cancellation for ten days; authentication state and environment files are never uploaded.
 # Guided setup coverage
 
 CI covers the new guided setup validation tests in addition to fast, PGlite, real PostgreSQL, lint, type checking, and production build stages.

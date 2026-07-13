@@ -1,0 +1,43 @@
+import { test, expect } from "@playwright/test";
+import { signUp, syntheticAccount } from "./support/accounts";
+import { monitorBrowserErrors } from "./support/console-monitor";
+import { addOutcome, saveFoundation, startDraft } from "./support/workflow";
+
+test("shows readiness blockers, then clears them while retaining warnings", async ({ page, context }) => {
+  const assertNoErrors = monitorBrowserErrors(page);
+  const account = syntheticAccount("readiness");
+  await signUp(page, account);
+  const draftId = await startDraft(page, `Readiness ${account.email}`);
+  await saveFoundation(page, `Readiness ${account.email}`, "Use a realistic plan.");
+  await page.getByPlaceholder("Add a proposed goal").fill("A goal without a measure");
+  await page.getByRole("button", { name: "Add goal" }).click();
+  await page.getByRole("button", { name: "Review setup" }).click();
+  await expect(page).toHaveURL(new RegExp(`/season/setup/${draftId}/review$`));
+  await expect(page.getByRole("heading", { name: "Needs attention" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Blockers" })).toBeVisible();
+  await expect(page.getByText(/needs a measurable outcome/)).toBeVisible();
+  await expect(page.getByRole("button", { name: "Confirm and lock setup" })).toHaveCount(0);
+
+  await page.getByRole("link", { name: "Back to editing" }).click();
+  await addOutcome(page, "A goal without a measure", "boolean", "Make the goal true");
+  await page.getByRole("button", { name: "Review setup" }).click();
+  await expect(page.getByRole("status")).toContainText("No blockers remain");
+  await expect(page.getByRole("heading", { name: "Warnings" })).toBeVisible();
+  await expect(page.getByText("No priority ideas have been recorded.")).toBeVisible();
+  await expect(page.getByText("No constraints have been recorded.")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Confirm and lock setup" })).toBeVisible();
+  const staleReview = await context.newPage();
+  const assertStaleErrors = monitorBrowserErrors(staleReview);
+  await staleReview.goto(page.url());
+  await page.getByRole("link", { name: "Back to editing" }).click();
+  await page.getByRole("button", { name: "Save foundation" }).click();
+  await staleReview.getByRole("button", { name: "Confirm and lock setup" }).click();
+  await expect(staleReview).toHaveURL(new RegExp(`/season/setup/${draftId}/review\\?error=confirmation$`));
+  await expect(staleReview.getByRole("alert")).toContainText("Confirmation could not be completed");
+  await staleReview.close();
+  await page.getByRole("button", { name: "Review setup" }).click();
+  await page.getByRole("button", { name: "Confirm and lock setup" }).click();
+  await expect(page).toHaveURL(new RegExp(`/season/setup/${draftId}/complete$`));
+  await assertStaleErrors();
+  await assertNoErrors();
+});

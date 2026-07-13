@@ -56,6 +56,8 @@ All tasks, dates, scores, goal progress, check-in values, reflections, and insig
 
 No persistence, task generation, scheduling, completion behavior, check-in submission, authentication, API, analytics, notifications, or domain service exists.
 
+The current authenticated shell is exercised by Chromium at approximately 390 × 844 and 1440 × 900. Browser checks verify one main landmark and heading, labeled controls, active navigation semantics, action reachability above mobile navigation, and no document-level horizontal overflow. These checks complement the remaining manual visual and accessibility review.
+
 ## Deliberately postponed
 
 - Real data and interaction behavior

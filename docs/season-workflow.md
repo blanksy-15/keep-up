@@ -13,6 +13,8 @@ The setup lifecycle is `draft -> ready_for_review -> confirmed`. Editing returns
 A review belongs to a completed season. Its lifecycle is `draft -> ready_for_summary -> summary_proposed -> finalized`; assistant input is optional. User-authored content and assistant proposals remain separate. Only explicitly selected candidates become approved carry-forward insights. Finalization requires explicit confirmation, does not alter the source season, and does not create the next season.
 
 Approved insights retain source season and review identifiers. A later setup may copy them as context, never as an automatic commitment.
+
+The guided setup workflow is browser-tested end to end with PostgreSQL. The browser proof includes durable reopen behavior, readiness blockers versus warnings, confirmation locking, a resulting draft season, repeated-conversion idempotency, and cross-owner denial. Operation failures are rendered with safe inline feedback rather than silent returns.
 # Guided setup UI
 
 The manual setup workflow is available through authenticated `/season/setup` routes. Drafts remain workflow proposals; readiness, explicit confirmation, and transactional conversion create authoritative draft seasons without activation. See [guided-season-setup-ui](./guided-season-setup-ui.md).

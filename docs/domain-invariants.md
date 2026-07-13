@@ -85,4 +85,4 @@ Labels mean:
 - **Undecided:** How outcome and weekly scorecard values are calculated or aggregated.
 # Setup UI invariants
 
-Goals remain unrestricted and user-authored. Readiness blockers prevent confirmation, warnings do not, confirmation locks the workflow proposal, and conversion does not activate the resulting season.
+Goals remain unrestricted and user-authored. Readiness blockers prevent confirmation, warnings do not, confirmation locks the workflow proposal, and conversion does not activate the resulting season. Authenticated browser tests additionally verify that session-derived ownership survives the Next.js and Better Auth boundary, that converted setup drafts retain one target season, and that the resulting season remains draft.

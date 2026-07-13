@@ -50,6 +50,8 @@ The first coherent release supports one person through one complete season lifec
 - Production domain selection and custom domain configuration
 - Public API access
 
+The current milestone adds verification infrastructure only: Chromium Playwright tests, synthetic accounts, PostgreSQL-only E2E cleanup, responsive checks, and safe confirmation/conversion feedback. It does not add AI, activation, daily execution, weekly reflections, analytics, sharing, OAuth, or deployment behavior.
+
 ## Undecided
 
 ### Seasons and goals

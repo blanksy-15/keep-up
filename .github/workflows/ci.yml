@@ -63,3 +63,57 @@ jobs:
         run: npm run typecheck
       - name: Production build
         run: npm run build
+
+  e2e:
+    name: Authenticated browser verification
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: keep_up_e2e_test
+          POSTGRES_PASSWORD: keep_up_e2e_test
+          POSTGRES_DB: keep_up_e2e_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U keep_up_e2e_test -d keep_up_e2e_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      DATABASE_URL: postgresql://keep_up_e2e_test:keep_up_e2e_test@127.0.0.1:5432/keep_up_e2e_test
+      BETTER_AUTH_SECRET: ci-e2e-secret-that-is-longer-than-thirty-two-characters
+      BETTER_AUTH_URL: http://127.0.0.1:3101
+      PLAYWRIGHT_BASE_URL: http://127.0.0.1:3101
+      ALLOW_PUBLIC_SIGN_UP: "true"
+      E2E_TEST_MODE: "true"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Apply committed migrations
+        run: npm run db:migrate
+      - name: Run authenticated browser tests
+        run: npm run test:e2e
+      - name: Upload Playwright diagnostics on failure
+        if: ${{ failure() || cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-diagnostics-${{ github.run_id }}
+          path: |
+            playwright-report/
+            test-results/
+          if-no-files-found: ignore
+          retention-days: 10

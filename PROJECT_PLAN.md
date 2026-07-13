@@ -1,14 +1,16 @@
 # Vision
 
-## Current milestone (2026-07-12)
+## Current milestone (2026-07-13)
 
-**Guided Season Setup UI** — authenticated, mobile-first manual setup routes and server actions backed by durable owner-scoped drafts and transactional conversion. Authentication and Data Ownership is complete.
+**Authenticated Browser End-to-End Verification** — Chromium Playwright coverage of the authenticated guided setup through Next.js, Better Auth, session-derived ownership, PostgreSQL repositories, transactional conversion, and mobile/desktop responsive behavior. Guided Season Setup UI and Authentication and Data Ownership are complete.
 
 New organization includes `src/application/season-workflow`, `src/application/assistant`, `docs/season-workflow.md`, `docs/assistant-boundaries.md`, and `docs/season-summary-standard.md`.
 
 Database organization includes `src/config`, `src/database/schema`, `src/persistence/postgres`, `drizzle`, and `docs/postgresql-persistence.md`.
 
 CI organization includes `.github/workflows/ci.yml`, `.nvmrc`, real-server tests, and `docs/continuous-integration.md`.
+
+Browser verification organization includes `playwright.config.ts`, `tests/e2e`, `docs/browser-end-to-end-testing.md`, Chromium projects at approximately 390 × 844 and 1440 × 900, synthetic account isolation, browser error monitoring, and failure-only Playwright artifacts.
 
 Identity organization includes `src/auth`, `src/application/identity`, the Better Auth API route, sign-in/sign-up pages, migration `0001`, and `docs/authentication-and-ownership.md`.
 
@@ -22,9 +24,9 @@ Guided setup organization includes `src/server/planning`, `src/components/season
 - Replaceable assistant providers return proposals requiring selective user application.
 - Summaries are pragmatic, grounded, uncertainty-aware, and constructively future-positive.
 - Carry-forward insights require explicit approval and are embedded in finalized reviews.
-- Conversion produces a deterministic plan because transactional persistence is unavailable.
+- Conversion produces a deterministic plan and is executed transactionally in PostgreSQL.
 - Finalized reviews are immutable initially.
-- Provider integration, chatbot/API transport, production persistence, authentication, and workflow UI remain postponed.
+- AI provider integration, chatbot/API transport, activation, daily execution, weekly reflection, analytics, deployment, and broader browser coverage remain postponed.
 - PostgreSQL is the durable database model; Drizzle and migration-first schema management are provider-neutral implementation choices.
 - `DATABASE_URL` is validated only at explicit composition; no hosted provider is selected.
 - A transaction-runner contract hides real PostgreSQL transactions from application services.
@@ -32,7 +34,7 @@ Guided setup organization includes `src/server/planning`, `src/components/season
 - `SELECT ... FOR UPDATE` protects conversion status rechecks; database uniqueness provides final enforcement.
 - Evolving workflow bodies use validated JSONB while stable planning relationships remain relational.
 - In-memory repositories remain; PGlite provides isolated PostgreSQL-compatible migration/transaction tests.
-- UI integration, authentication/ownership, AI providers, chatbot transport, hosted provisioning, and daily execution remain postponed.
+- UI integration, authentication/ownership, AI providers, chatbot transport, hosted provisioning, and daily execution are complete or intentionally outside this milestone; AI, activation, daily execution, weekly reflection, deployment, and broader browser coverage remain postponed.
 - GitHub Actions runs on `main` pushes and pull requests with read-only contents permission and no deployment.
 - CI uses Node 20 and disposable PostgreSQL 16 with ephemeral test credentials.
 - Fast/PGlite tests and guarded real-PostgreSQL tests are separate commands.
@@ -114,7 +116,9 @@ keep-up/
 │       ├── mapping/    # Pure domain/record conversion and reconstruction validation
 │       ├── memory/     # Isolated deterministic in-memory implementations
 │       └── records/    # Serializable storage-oriented records
-├── tests/              # Domain, persistence, and application-service tests using Node's runner
+├── tests/              # Lower-level Node tests and PostgreSQL-backed browser tests
+│   └── e2e/            # Playwright auth, workflow, readiness, ownership, responsive, and support tests
+├── playwright.config.ts # Chromium-only Playwright projects and test web server
 ├── PROJECT_PLAN.md     # Living architecture and roadmap
 └── configuration files
 ```
@@ -519,14 +523,14 @@ Important open questions are maintained in [Initial Product Scope](./docs/initia
 
 # Current Milestone
 
-## Application Service Layer
+## Authenticated Browser End-to-End Verification
 
-**Current objective:** Establish framework-independent planning use cases that coordinate domain behavior and persistence contracts through deterministic dependencies and stable application results.
+**Current objective:** Prove the complete authenticated guided season setup workflow through the real browser and server stack while preserving owner isolation, PostgreSQL transaction behavior, and responsive accessibility foundations.
 
-**Included work:** Season/goal creation and lifecycle orchestration; outcome and milestone updates; centralized parent-state policies; application error translation; clock/ID contracts; season overview assembly; deterministic integration tests; and documented atomicity limits.
+**Included work:** Playwright Test with Chromium; mobile and desktop viewport strategy; synthetic isolated accounts and real sign-up/sign-in pages; PostgreSQL-only guarded E2E setup and cleanup; durable reopen, readiness, confirmation lock, conversion idempotency, cross-owner denial, browser-console monitoring, overflow checks, native accessibility assertions, safe inline confirmation/conversion errors, ignored auth-state handling, and a separate CI E2E job. Drizzle commands explicitly load `.env.local` and fail clearly without a configured URL.
 
-**Explicitly excluded work:** Route/UI/server-action/API wiring, authentication/ownership, production database/ORM, transaction APIs, multi-record writes, general editing, outcome/milestone creation, daily execution, reflections, AI, notifications, analytics, caching, and deployment configuration.
+**Explicitly excluded work:** AI providers, chatbot UI, activation, daily tasks, daily check-ins, weekly scorecards/reflections, analytics, family sharing, OAuth, recovery, production deployment, production infrastructure, Firefox/WebKit, broad visual redesign, and any test-only session or owner bypass.
 
-**Completion criteria:** Services reuse domain behavior, depend on repository interfaces, translate failures, enforce documented parent policies, perform at most one write, assemble deterministic overviews, pass all suites and dependency audits, and leave routes/static UI unchanged.
+**Completion criteria:** Browser tests are discovered separately from `npm test`, run against a safe PostgreSQL database, execute the authenticated happy path and focused isolation/error/responsive scenarios, retain no secrets or auth state, and pass alongside lower-level suites, lint, type checking, build, migration checks, and architecture audits. CI results must be inspected before claiming browser verification complete.
 
-**Next decision point:** Connect one read-only product surface to the application layer through a thin framework adapter without introducing mutation or production storage.
+**Next decision point:** Choose one follow-up product or quality improvement after the remote E2E run is inspected; AI, activation, daily execution, weekly reflection, deployment, and broader browser coverage remain postponed.
