@@ -29,5 +29,5 @@ export async function addOutcome(page: Page, goalText: string, type: string, tex
   if (target) await form.getByLabel(/Target/).fill(target);
   if (unit) await form.getByLabel(/Unit/).fill(unit);
   await form.getByRole("button", { name: "Add outcome" }).click();
-  await expect(goal.getByText(text, { exact: true })).toBeVisible();
+  await expect(goal.locator(".outcome-editor input[name=\"text\"]").last()).toHaveValue(text);
 }

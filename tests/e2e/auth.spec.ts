@@ -22,7 +22,7 @@ test("authenticates through the real sign-up and sign-in pages", async ({ page }
   await page.getByRole("button", { name: "Sign in" }).focus();
   await expect(page.getByRole("button", { name: "Sign in" })).toBeFocused();
   await page.getByLabel("Password").press("Enter");
-  await expect(page.getByRole("alert")).toContainText("Sign-in was not completed");
+  await expect(page.getByRole("alert").filter({ hasText: "Sign-in was not completed" })).toBeVisible();
   await expect(page).toHaveURL(/\/sign-in$/);
   await expect(page.locator("body")).not.toContainText("wrong-password");
 

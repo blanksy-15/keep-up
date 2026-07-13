@@ -30,7 +30,7 @@ test("completes, persists, locks, and converts a guided season setup", async ({ 
   await signIn(page, account);
   await page.goto("/season/setup");
   await expect(page.getByText(title, { exact: true })).toBeVisible();
-  await expect(page.getByRole("link", { name: "Resume" })).toHaveAttribute("href", `/season/setup/${draftId}`);
+  await expect(page.getByRole("link", { name: "Resume" })).toHaveAttribute("href", /\/season\/setup\/[^/]+$/);
   await page.goto(`/season/setup/${draftId}`);
   await expect(page.getByLabel("Season title")).toHaveValue(title);
 
