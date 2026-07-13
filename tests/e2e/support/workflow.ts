@@ -1,7 +1,8 @@
 import { expect, type Page } from "@playwright/test";
 
 export async function overflowIsAbsent(page: Page) {
-  expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
+  const dimensions = await page.evaluate(() => ({ scrollWidth: document.documentElement.scrollWidth, clientWidth: document.documentElement.clientWidth }));
+  expect(dimensions.scrollWidth, JSON.stringify(dimensions)).toBeLessThanOrEqual(dimensions.clientWidth);
 }
 
 export async function startDraft(page: Page, title: string) {

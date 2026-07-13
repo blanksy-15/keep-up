@@ -33,7 +33,7 @@ test("shows readiness blockers, then clears them while retaining warnings", asyn
   await page.getByRole("button", { name: "Save foundation" }).click();
   await staleReview.getByRole("button", { name: "Confirm and lock setup" }).click();
   await expect(staleReview).toHaveURL(/\/season\/setup\/[^/]+\/review\?error=confirmation$/);
-  await expect(staleReview.getByRole("alert")).toContainText("Confirmation could not be completed");
+  await expect(staleReview.getByRole("alert").filter({ hasText: "Confirmation could not be completed" })).toBeVisible();
   await staleReview.close();
   await page.getByRole("button", { name: "Review setup" }).click();
   await page.getByRole("button", { name: "Confirm and lock setup" }).click();

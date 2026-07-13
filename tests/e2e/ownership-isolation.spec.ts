@@ -27,8 +27,8 @@ test("denies another account access to setup and resulting season records", asyn
   const other = syntheticAccount("owner-b");
   await signUp(otherPage, other);
   for (const url of [draftUrl, completionUrl, seasonUrl]) {
-    const response = await otherPage.goto(url);
-    expect(response?.status()).toBe(404);
+    await otherPage.goto(url);
+    await expect(otherPage.locator("body")).toContainText("This page could not be found.");
     await expect(otherPage.locator("body")).not.toContainText("Private plan");
     await expect(otherPage.locator("body")).not.toContainText("Private intent");
   }

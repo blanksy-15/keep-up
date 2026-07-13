@@ -42,11 +42,16 @@ test("completes, persists, locks, and converts a guided season setup", async ({ 
     await expect(page.getByText(priority, { exact: true })).toBeVisible();
   }
   const firstPriority = page.locator("div.setup-row").filter({ hasText: "Protect deep work" }).first();
-  await firstPriority.locator('input[type="checkbox"]').check();
-  await expect(firstPriority.locator('input[type="checkbox"]')).toBeChecked();
-  await firstPriority.locator('input[type="checkbox"]').uncheck();
-  await firstPriority.locator('input[name="text"]').fill("Protect deliberate deep work");
-  await firstPriority.getByRole("button", { name: "Save" }).click();
+  await firstPriority.locator('input[type="checkbox"]').click();
+  await page.reload();
+  const selectedPriority = page.locator("div.setup-row").filter({ hasText: "Protect deep work" }).first().locator('input[type="checkbox"]');
+  await expect(selectedPriority).toBeChecked();
+  await selectedPriority.click();
+  await page.reload();
+  const firstPriorityAfterToggle = page.locator("div.setup-row").filter({ hasText: "Protect deep work" }).first();
+  await expect(firstPriorityAfterToggle.locator('input[type="checkbox"]')).not.toBeChecked();
+  await firstPriorityAfterToggle.locator('input[name="text"]').fill("Protect deliberate deep work");
+  await firstPriorityAfterToggle.getByRole("button", { name: "Save" }).click();
   await expect(page.getByText("Protect deliberate deep work", { exact: true })).toBeVisible();
   await page.locator("div.setup-row").filter({ hasText: "Keep scope humane" }).first().getByRole("button", { name: "Remove" }).click();
   await expect(page.getByText("Keep scope humane", { exact: true })).toHaveCount(0);
