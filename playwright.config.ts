@@ -5,6 +5,7 @@ import { requireSafeTestDatabaseUrl } from "./tests/support/postgres-test-databa
 loadEnvConfig(process.cwd());
 
 const baseURL = process.env.PLAYWRIGHT_BASE_URL?.trim() || "http://127.0.0.1:3101";
+const npmCommand = process.platform === "win32" ? "npm.cmd" : "npm";
 const databaseUrl = requireSafeTestDatabaseUrl(process.env);
 const authSecret = process.env.BETTER_AUTH_SECRET?.trim();
 
@@ -40,7 +41,7 @@ export default defineConfig({
     extraHTTPHeaders: { "x-keep-up-e2e": "true" },
   },
   webServer: {
-    command: "npm.cmd run dev -- --hostname 127.0.0.1 --port 3101",
+    command: `${npmCommand} run dev -- --hostname 127.0.0.1 --port 3101`,
     url: baseURL,
     timeout: 120_000,
     reuseExistingServer: !process.env.CI,
