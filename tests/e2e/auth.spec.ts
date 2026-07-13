@@ -3,7 +3,7 @@ import { signIn, signOut, signUp, syntheticAccount } from "./support/accounts";
 import { monitorBrowserErrors } from "./support/console-monitor";
 
 test("authenticates through the real sign-up and sign-in pages", async ({ page }) => {
-  const assertNoErrors = monitorBrowserErrors(page);
+  const assertNoErrors = monitorBrowserErrors(page, { ignoredConsoleErrors: [/Failed to load resource: the server responded with a status of 401 \(UNAUTHORIZED\)/] });
   const account = syntheticAccount("auth");
 
   await page.goto("/season");

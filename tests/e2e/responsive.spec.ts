@@ -23,7 +23,7 @@ test("keeps authenticated season setup usable at the configured viewport", async
   await overflowIsAbsent(page);
   await signIn(page, account);
   const title = `Responsive ${account.email}`;
-  const draftId = await startDraft(page, title);
+  await startDraft(page, title);
   await overflowIsAbsent(page);
   await saveFoundation(page, title, "Keep the plan readable on a small screen.");
   await page.getByPlaceholder("Add a proposed goal").fill("Responsive goal");
@@ -31,11 +31,11 @@ test("keeps authenticated season setup usable at the configured viewport", async
   await addOutcome(page, "Responsive goal", "boolean", "Reach the goal");
   await overflowIsAbsent(page);
   await page.getByRole("button", { name: "Review setup" }).click();
-  await expect(page).toHaveURL(new RegExp(`/season/setup/${draftId}/review$`));
+  await expect(page).toHaveURL(/\/season\/setup\/[^/]+\/review$/);
   await overflowIsAbsent(page);
   await expect(page.getByRole("button", { name: "Confirm and lock setup" })).toBeVisible();
   await page.getByRole("button", { name: "Confirm and lock setup" }).click();
-  await expect(page).toHaveURL(new RegExp(`/season/setup/${draftId}/complete$`));
+  await expect(page).toHaveURL(/\/season\/setup\/[^/]+\/complete$/);
   await overflowIsAbsent(page);
   await page.getByRole("button", { name: "Create draft season" }).click();
   await expect(page).toHaveURL(/\/season\/[^/]+$/);

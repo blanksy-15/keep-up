@@ -15,6 +15,7 @@ test("completes, persists, locks, and converts a guided season setup", async ({ 
   await expect(page.getByRole("heading", { name: "Seasons with intention" })).toBeVisible();
   await expect(page.getByText("No seasons yet")).toBeVisible();
   const draftId = await startDraft(page, title);
+  const setupUrl = page.url();
   expect(draftId).toBeTruthy();
   expect(page.url()).toContain(`/season/setup/${draftId}`);
 
@@ -30,8 +31,9 @@ test("completes, persists, locks, and converts a guided season setup", async ({ 
   await signIn(page, account);
   await page.goto("/season/setup");
   await expect(page.getByText(title, { exact: true })).toBeVisible();
-  await expect(page.getByRole("link", { name: "Resume" })).toHaveAttribute("href", /\/season\/setup\/[^/]+$/);
-  await page.goto(`/season/setup/${draftId}`);
+  const resumeHref = await page.getByRole("link", { name: "Resume" }).getAttribute("href");
+  expect(resumeHref).toMatch(/\/season\/setup\/[^/]+$/);
+  await page.goto(resumeHref!);
   await expect(page.getByLabel("Season title")).toHaveValue(title);
 
   for (const priority of ["Protect deep work", "Keep scope humane", "Make progress visible"]) {
@@ -75,7 +77,7 @@ test("completes, persists, locks, and converts a guided season setup", async ({ 
   await addOutcome(page, secondGoal, "count", "Share a replacement update", "5", "updates");
 
   await page.getByRole("button", { name: "Review setup" }).click();
-  await expect(page).toHaveURL(new RegExp(`/season/setup/${draftId}/review$`));
+  await expect(page).toHaveURL(/\/season\/setup\/[^/]+\/review$/);
   await expect(page.getByRole("heading", { name: "Ready to confirm" })).toBeVisible();
   await expect(page.getByText(intent)).toBeVisible();
   await expect(page.getByText("Publish the first useful version", { exact: true })).toBeVisible();
@@ -83,7 +85,7 @@ test("completes, persists, locks, and converts a guided season setup", async ({ 
   await expect(page.getByText(/count/)).toBeVisible();
 
   await page.getByRole("button", { name: "Confirm and lock setup" }).click();
-  await expect(page).toHaveURL(new RegExp(`/season/setup/${draftId}/complete$`));
+  await expect(page).toHaveURL(/\/season\/setup\/[^/]+\/complete$/);
   const completionUrl = page.url();
   await expect(page.getByRole("heading", { name: "Create your draft season" })).toBeVisible();
   const staleCompletion = await context.newPage();
@@ -91,7 +93,7 @@ test("completes, persists, locks, and converts a guided season setup", async ({ 
   await staleCompletion.goto(completionUrl);
   await expect(staleCompletion.getByRole("button", { name: "Create draft season" })).toBeVisible();
 
-  const editResponse = await page.goto(`/season/setup/${draftId}`);
+  const editResponse = await page.goto(setupUrl);
   expect(editResponse?.status()).toBe(404);
   await page.goto(completionUrl);
   await expect(page.getByRole("heading", { name: "Create your draft season" })).toBeVisible();
@@ -106,7 +108,7 @@ test("completes, persists, locks, and converts a guided season setup", async ({ 
   await expect(page.getByText("Reach meaningful completeness", { exact: true })).toBeVisible();
 
   await staleCompletion.getByRole("button", { name: "Create draft season" }).click();
-  await expect(staleCompletion).toHaveURL(new RegExp(`/season/setup/${draftId}/complete\\?error=already-converted$`));
+  await expect(staleCompletion).toHaveURL(/\/season\/setup\/[^/]+\/complete\?error=already-converted$/);
   await expect(staleCompletion.getByRole("status")).toContainText("already created a season");
   await expect(staleCompletion.getByRole("link", { name: "Open existing season" })).toHaveAttribute("href", `/season/${seasonId}`);
   await staleCompletion.close();

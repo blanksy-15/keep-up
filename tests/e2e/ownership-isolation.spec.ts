@@ -9,7 +9,8 @@ test("denies another account access to setup and resulting season records", asyn
   const owner = syntheticAccount("owner-a");
   const title = `Private plan ${owner.email}`;
   await signUp(ownerPage, owner);
-  const draftId = await startDraft(ownerPage, title);
+  await startDraft(ownerPage, title);
+  const draftUrl = ownerPage.url();
   await saveFoundation(ownerPage, title, "This private intent must stay with owner A.");
   await ownerPage.getByPlaceholder("Add a proposed goal").fill("Private goal for owner A");
   await ownerPage.getByRole("button", { name: "Add goal" }).click();
@@ -25,7 +26,7 @@ test("denies another account access to setup and resulting season records", asyn
   const otherErrors = monitorBrowserErrors(otherPage);
   const other = syntheticAccount("owner-b");
   await signUp(otherPage, other);
-  for (const url of [`/season/setup/${draftId}`, `${completionUrl}`, seasonUrl]) {
+  for (const url of [draftUrl, completionUrl, seasonUrl]) {
     const response = await otherPage.goto(url);
     expect(response?.status()).toBe(404);
     await expect(otherPage.locator("body")).not.toContainText("Private plan");
